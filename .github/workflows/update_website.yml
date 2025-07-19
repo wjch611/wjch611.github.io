@@ -1,0 +1,39 @@
+name: Send submodule updates to parent repo
+
+on:
+  push:
+    branches: 
+      - main
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Super-Botman/Super-Botman.github.io
+          token: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
+          submodules: recursive
+          
+      - name: Update submodules
+        id: update
+        run: git submodule update --remote --recursive
+
+        
+      - name: Add and commit files
+        run: |
+          git add .
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update submodules at $(date "+DATE: %Y-%m-%d TIME: %H:%M:%S")"
+        
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
+          repository: Super-Botman/Super-Botman.github.io
+          branch: main
