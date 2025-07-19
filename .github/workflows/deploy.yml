@@ -22,7 +22,7 @@ jobs:
         run: zola build
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3   # 🔥 注意是 v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}  # 🔥 注意是 token，不是 github_token
           publish_dir: ./public
