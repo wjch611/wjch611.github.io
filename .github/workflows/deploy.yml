@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}   # 使用你的 PAT 令牌
 
       - name: Install Zola
         run: |
@@ -22,7 +24,8 @@ jobs:
         run: zola build
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3   # 🔥 注意是 v3
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # 🔥 注意是 token，不是 github_token
+          token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}   # 使用你的 PAT 令牌
           publish_dir: ./public
+
