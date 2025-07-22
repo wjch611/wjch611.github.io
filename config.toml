@@ -23,8 +23,8 @@ name = "categories"
 slug = "categories"
 
 [extra.social]
-github = "minglovecoding"
-twitter = "minglovecoding"
+github = "wjch611"
+twitter = "wjch611"
 
 [extra.show]
 links = true
@@ -32,7 +32,7 @@ tags = true
 
 [languages.en]
 generate_feeds = true
-description = "些许风扇，衣角微脏"
+description = "些许风霜，衣角微脏"
 
 [languages.en.translations]
 about = "About"
