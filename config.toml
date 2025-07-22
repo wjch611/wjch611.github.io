@@ -1,35 +1,45 @@
-# The URL the site will be built for
+# config.toml 示例
+title = "WJCH"
 base_url = "https://wjch611.github.io"
 
-# Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
-
-# Whether to build a search index to be used later on by a JavaScript library
+ignored_content = ["README.md"]
 build_search_index = true
+default_language = "en"
 
 [markdown]
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
+highlight_theme = "base16-ocean-light"
 
 [extra]
-######################
-# Mandatory settings #
-######################
+katex_enable = true
 
-# set the name of the blog
-blog_name = "name"
+[[taxonomies]]
+name = "tags"
+slug = "tags"
 
-#####################
-# Optional settings #
-#####################
+[[taxonomies]]
+name = "categories"
+slug = "categories"
 
-# set the background image u want
-background-image = "assets/background.jpg"
+[extra.social]
+github = "minglovecoding"
+twitter = "minglovecoding"
 
-# this parameter allow you to configure specific init functions/shortcuts and commands
-# the value has to be the path of you're config.js file
-config_js = "config.js"
+[extra.show]
+links = true
+tags = true
 
-# allow you to include custom css into u're blog
-custom_css = "style.css"
+[languages.en]
+generate_feeds = true
+description = "些许风扇，衣角微脏"
+
+[languages.en.translations]
+about = "About"
+home = "Home"
+tags = "Tags"
+archive = "Archive"
+links = "Links"
+date_format = "%Y-%m-%d"
+next_page = "Next Page"
+last_page = "Last Page"
