@@ -4,6 +4,7 @@ on:
       - main
 
 name: Build and deploy GH Pages
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -11,10 +12,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Create CNAME file
+        run: echo "cybersafe.top" > CNAME
+
       - name: Deploy
         uses: shalzz/zola-deploy-action@v0.19.2
         env:
-          # Target branch
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
