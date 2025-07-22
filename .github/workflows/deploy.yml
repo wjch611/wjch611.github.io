@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create CNAME file
-        run: echo "cybersafe.top" > CNAME
+        run: echo "cybersafe.top" > public/CNAME
+
 
       - name: Deploy
         uses: shalzz/zola-deploy-action@v0.19.2
