@@ -4,7 +4,6 @@ on:
       - main
 
 name: Build and deploy GH Pages
-
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -13,13 +12,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 添加创建 CNAME 文件的步骤
       - name: Create CNAME file
-        run: echo "cybersafe.top" > public/CNAME
-
+        run: |
+          echo "cybersafe.top" > ./CNAME
 
       - name: Deploy
         uses: shalzz/zola-deploy-action@v0.19.2
         env:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .
+          # 添加构建参数确保 CNAME 被包含
+          BUILD_FLAGS: '--output-dir public'
+          # 指定额外文件位置
+          EXTRA_FILES: 'CNAME'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
