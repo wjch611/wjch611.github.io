@@ -5,6 +5,238 @@
   <div class="post-content">{{ section.content | safe }}</div>
 </article>
 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日进度条</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --border-radius: 10px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 2.2rem;
+        }
+        
+        .date-display {
+            font-size: 1.4rem;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+        
+        .progress-container {
+            background-color: var(--background-color);
+            border-radius: var(--border-radius);
+            height: 40px;
+            margin: 30px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #43cea2, #185a9d);
+            height: 100%;
+            width: 0;
+            border-radius: var(--border-radius);
+            transition: width 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 40px;
+            color: var(--text-color);
+            z-index: 10;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .stat-box {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            flex: 1;
+            min-width: 120px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .inspiration {
+            margin-top: 30px;
+            font-style: italic;
+            color: #555;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>年度进度追踪器</h1>
+        <div class="date-display" id="dateDisplay">正在加载日期...</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="dayOfYear">-</div>
+                <div class="stat-label">今年已过天数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="daysRemaining">-</div>
+                <div class="stat-label">剩余天数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="percentComplete">0%</div>
+                <div class="stat-label">完成百分比</div>
+            </div>
+        </div>
+        
+        <div class="inspiration" id="inspiration">
+            "时间就像海绵里的水，只要愿挤，总还是有的。" - 鲁迅
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取当前日期
+            const now = new Date();
+            
+            // 获取年份
+            const year = now.getFullYear();
+            
+            // 检查是否是闰年
+            const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+            
+            // 计算当年总天数
+            const totalDays = isLeapYear ? 366 : 365;
+            
+            // 计算当前是当年的第几天
+            const startOfYear = new Date(year, 0, 1);
+            const diff = now - startOfYear;
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+            
+            // 计算剩余天数
+            const daysRemaining = totalDays - dayOfYear;
+            
+            // 计算完成百分比
+            const percentComplete = ((dayOfYear / totalDays) * 100).toFixed(2);
+            
+            // 更新显示元素
+            document.getElementById('dateDisplay').textContent = 
+                `今天是 ${year} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+            
+            document.getElementById('dayOfYear').textContent = dayOfYear;
+            document.getElementById('daysRemaining').textContent = daysRemaining;
+            document.getElementById('percentComplete').textContent = percentComplete + '%';
+            
+            // 设置进度条
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            // 使用动画效果显示进度
+            setTimeout(() => {
+                progressBar.style.width = percentComplete + '%';
+                progressText.textContent = percentComplete + '%';
+            }, 500);
+            
+            // 设置励志语录
+            const quotes = [
+                "时间就像海绵里的水，只要愿挤，总还是有的。 - 鲁迅",
+                "时间就是生命，时间就是速度，时间就是力量。 - 郭沫若",
+                "明日复明日，明日何其多，我生待明日，万事成蹉跎。 - 钱鹤滩",
+                "时间是人类发展的空间。 - 马克思",
+                "时间是一切财富中最宝贵的财富。 - 德奥弗拉斯多",
+                "最严重的浪费就是时间的浪费。 - 布封",
+                "没有方法能使时钟为我敲已过去了的钟点。 - 拜伦",
+                "时间是伟大的导师。 - 伯克",
+                "放弃时间的人，时间也放弃他。 - 莎士比亚",
+                "时间应分配得精密，使每年、每月、每天和每小时都有它的特殊任务。 - 夸美纽斯"
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('inspiration').textContent = `"${randomQuote}"`;
+        });
+    </script>
+</body>
+</html>
+
 {% endblock content %}
 
 
