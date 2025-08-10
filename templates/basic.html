@@ -125,7 +125,6 @@
         <li><a {% if language_site_path is starting_with("/about") %}class="current" {% endif %} href="{{ get_url(path="@/about/_index.md", lang=lang) }}">{{ trans(key="about", lang=lang) }}</a></li>
         {% if config.extra.show.links %}
         <li><a {% if language_site_path is starting_with("/link") %}class="current" {% endif %} href="{{ get_url(path="@/link/_index.md", lang=lang) }}">{{ trans(key="links", lang=lang) }}</a></li>
-        {% if config.extra.show.tags %}
         <li><a {% if language_site_path is starting_with("/flags") %}class="current" {% endif %} href="{{ get_url(path="@/flags/_index.md", lang=lang) }}">{{ trans(key="flags", lang=lang) }}</a></li>
         {% endif %}
 
