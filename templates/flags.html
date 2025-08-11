@@ -3,72 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheOnlywaypassToyou...</title>
+    <title>目标进度追踪</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         :root {
-            --primary-color: #FF6B6B; /* 改为浪漫的粉色 */
-            --background-color: rgba(255,255,255,0.9);
+            --primary-color: #FF6B6B; /* 浪漫粉色 */
+            --secondary-color: #4A90E2;
+            --tertiary-color: #50C878;
+            --background-color: rgba(255, 255, 255, 0.92);
             --text-color: #333;
-            --border-radius: 10px;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 16px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --section-padding: 25px;
+            --panel-width: 480px;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
-                        url('https://img.3dmgame.com/uploads/images/news/20190402/1554188025_761476.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #a1c4fd);
+            color: var(--text-color);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            min-height: 100vh;
+            background-size: 400% 400%;
+            animation: gradientBG 25s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .nav-indicators {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .nav-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid rgba(0,0,0,0.1);
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .nav-dot.active {
+            background-color: white;
+            transform: scale(1.4);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        
+        .nav-dot::after {
+            content: attr(data-title);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .nav-dot:hover::after {
+            opacity: 1;
+        }
+        
+        section {
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            color: var(--text-color);
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
         }
         
         .container {
             background-color: var(--background-color);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            padding: 30px;
+            padding: var(--section-padding);
             width: 100%;
-            max-width: 600px;
+            max-width: var(--panel-width);
             text-align: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.8s ease;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        
+        .container.active {
+            transform: translateY(0);
+            opacity: 1;
         }
         
         h1 {
-            color: #FF6B6B; /* 粉色标题 */
             margin-top: 0;
-            font-size: 2.5rem;
+            font-size: 2.4rem;
             font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.05);
         }
         
-        .date-display {
-            font-size: 1.4rem;
-            margin: 20px 0;
-            font-weight: 500;
+        .goal-icon {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.05));
+        }
+        
+        .description {
+            font-size: 1.15rem;
+            margin-bottom: 25px;
             color: #555;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            font-weight: 500;
         }
         
         .progress-container {
-            background-color: var(--background-color);
+            background-color: rgba(233, 236, 239, 0.7);
             border-radius: var(--border-radius);
             height: 40px;
-            margin: 30px 0;
+            margin: 35px 0;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
         
         .progress-bar {
-            background: linear-gradient(90deg, #FF9A9E, #FAD0C4); /* 粉色渐变 */
             height: 100%;
             width: 0;
             border-radius: var(--border-radius);
-            transition: width 1s ease-in-out;
+            transition: width 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
             display: flex;
             align-items: center;
             justify-content: flex-end;
@@ -79,10 +176,11 @@
             width: 100%;
             text-align: center;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             line-height: 40px;
             color: var(--text-color);
             z-index: 10;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
         }
         
         .stats {
@@ -90,44 +188,219 @@
             justify-content: space-around;
             flex-wrap: wrap;
             margin-top: 30px;
+            gap: 12px;
         }
         
         .stat-box {
-            background: var(--background-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 16px;
             flex: 1;
-            min-width: 120px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
+            min-width: 130px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.03);
         }
         
         .stat-box:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.08);
         }
         
         .stat-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--primary-color);
-            margin: 5px 0;
+            margin: 6px 0;
+            font-family: 'Courier New', monospace;
         }
         
         .stat-label {
-            font-size: 0.9rem;
-            color: #777;
+            font-size: 0.95rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
         }
         
         .inspiration {
             margin-top: 30px;
             font-style: italic;
             color: #555;
-            border-top: 1px solid #eee;
+            border-top: 1px solid rgba(0,0,0,0.05);
             padding-top: 20px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            font-weight: 500;
         }
         
-        @media (max-width: 480px) {
+        .currency {
+            font-size: 1.1rem;
+            vertical-align: super;
+            margin-right: 3px;
+        }
+        
+        /* 输入区域样式 */
+        .input-area {
+            margin: 25px auto 10px;
+            max-width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.9);
+        }
+        
+        .input-group input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+        
+        .input-group button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .input-group button:hover {
+            background: #3a7bc8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        .input-group button:active {
+            transform: translateY(0);
+        }
+        
+        .input-hint {
+            font-size: 0.9rem;
+            color: #777;
+            font-style: italic;
+        }
+        
+        /* 爱情页面特定样式 - 根据您的参考样式优化 */
+        #love .container {
+            background: rgba(255, 255, 255, 0.92);
+        }
+        
+        #love h1 {
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        #love .progress-bar {
+            background: linear-gradient(90deg, #FF9A9E, #FAD0C4);
+        }
+        
+        #love .stat-value {
+            color: var(--primary-color);
+        }
+        
+        #love::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), 
+                        url('https://img.3dmgame.com/uploads/images/news/20190402/1554188025_761476.jpg') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.8;
+            z-index: 1;
+            filter: blur(1px);
+        }
+        
+        /* 日期显示样式 */
+        .date-display {
+            font-size: 1.4rem;
+            margin: 20px 0;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        /* 电脑页面特定样式 */
+        #computer h1 {
+            color: var(--secondary-color);
+        }
+        
+        #computer .progress-bar {
+            background: linear-gradient(90deg, #4A90E2, #6BB9F0);
+        }
+        
+        #computer .stat-value {
+            color: var(--secondary-color);
+        }
+        
+        #computer .input-group button {
+            background: var(--secondary-color);
+        }
+        
+        /* 摩托车页面特定样式 */
+        #motorcycle h1 {
+            color: var(--tertiary-color);
+        }
+        
+        #motorcycle .progress-bar {
+            background: linear-gradient(90deg, #50C878, #90EE90);
+        }
+        
+        #motorcycle .stat-value {
+            color: var(--tertiary-color);
+        }
+        
+        #motorcycle .input-group button {
+            background: var(--tertiary-color);
+        }
+        
+        /* 导航箭头 */
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(0,0,0,0.4);
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-20px) translateX(-50%);}
+            60% {transform: translateY(-10px) translateX(-50%);}
+        }
+        
+        @media (max-width: 768px) {
+            :root {
+                --panel-width: 90%;
+            }
+            
             .container {
                 padding: 20px;
             }
@@ -138,105 +411,465 @@
             
             .stats {
                 flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-box {
+                min-width: 80%;
+            }
+            
+            .nav-indicators {
+                right: 10px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-group button {
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .progress-container {
+                height: 36px;
+            }
+            
+            .progress-text {
+                font-size: 1rem;
+            }
+            
+            .goal-icon {
+                font-size: 2.2rem;
+            }
+            
+            .date-display {
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Waiting...</h1>
-        <div class="date-display" id="dateDisplay">正在加载日期...</div>
-        
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-            <div class="progress-text" id="progressText">0%</div>
-        </div>
-        
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-value" id="dayOfYear">-</div>
-                <div class="stat-label">已过天数</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="daysRemaining">-</div>
-                <div class="stat-label">剩余天数</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="percentComplete">0%</div>
-                <div class="stat-label">完成百分比</div>
-            </div>
-        </div>
-        
-        <div class="inspiration" id="inspiration">
-            "时间就像海绵里的水，只要愿挤，总还是有的。" - 鲁迅
-        </div>
+    <!-- 导航指示器 -->
+    <div class="nav-indicators">
+        <div class="nav-dot active" data-title="期待爱情" onclick="scrollToSection('love')"></div>
+        <div class="nav-dot" data-title="购买电脑" onclick="scrollToSection('computer')"></div>
+        <div class="nav-dot" data-title="购买摩托" onclick="scrollToSection('motorcycle')"></div>
     </div>
+    
+    <!-- 爱情等待页面 -->
+    <section id="love">
+        <div class="container">
+            <div class="goal-icon">❤️</div>
+            <h1>最美的期待</h1>
+            <div class="description">每一天都在向你靠近，期待我们的相遇</div>
+            
+            <div class="date-display" id="dateDisplay">正在加载日期...</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="dayOfYear">-</div>
+                    <div class="stat-label">已过天数</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="daysRemaining">-</div>
+                    <div class="stat-label">剩余天数</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percentComplete">0%</div>
+                    <div class="stat-label">完成百分比</div>
+                </div>
+            </div>
+            
+            <div class="inspiration" id="inspiration">
+                "时间就像海绵里的水，只要愿挤，总还是有的。" - 鲁迅
+            </div>
+        </div>
+        <div class="scroll-down" onclick="scrollToSection('computer')">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+    
+    <!-- 电脑购买页面 -->
+    <section id="computer">
+        <div class="container">
+            <div class="goal-icon">💻</div>
+            <h1>购买电脑</h1>
+            <div class="description">通过漏洞挖掘赚取赏金，购买一台高性能电脑</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="computerProgressBar"></div>
+                <div class="progress-text" id="computerProgressText">0%</div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value"><span class="currency">¥</span><span id="computerCurrent">0</span></div>
+                    <div class="stat-label">当前金额</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value"><span class="currency">¥</span>5,000</div>
+                    <div class="stat-label">目标金额</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value"><span id="computerPercent">0</span>%</div>
+                    <div class="stat-label">完成百分比</div>
+                </div>
+            </div>
+            
+            <div class="input-area">
+                <div class="input-group">
+                    <input type="number" id="computerInput" placeholder="输入当前金额（例如：2500）" min="0" max="5000">
+                    <button onclick="updateComputerProgress()">更新进度</button>
+                </div>
+                <div class="input-hint">目标金额: ¥5,000</div>
+            </div>
+            
+            <div class="inspiration">
+                "每一笔赏金都是通向目标的阶梯。坚持挖掘，终将达成目标！"
+            </div>
+        </div>
+        <div class="scroll-down" onclick="scrollToSection('motorcycle')">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+    
+    <!-- 摩托车购买页面 -->
+    <section id="motorcycle">
+        <div class="container">
+            <div class="goal-icon">🏍️</div>
+            <h1>购买摩托车</h1>
+            <div class="description">用漏洞挖掘的赏金购买心仪的摩托车，享受自由驰骋</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="motorcycleProgressBar"></div>
+                <div class="progress-text" id="motorcycleProgressText">0%</div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value"><span class="currency">¥</span><span id="motorcycleCurrent">0</span></div>
+                    <div class="stat-label">当前金额</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value"><span class="currency">¥</span>369,00</div>
+                    <div class="stat-label">目标金额</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value"><span id="motorcyclePercent">0</span>%</div>
+                    <div class="stat-label">完成百分比</div>
+                </div>
+            </div>
+            
+            <div class="input-area">
+                <div class="input-group">
+                    <input type="number" id="motorcycleInput" placeholder="输入当前金额（例如：5000）" min="0" max="36900">
+                    <button onclick="updateMotorcycleProgress()">更新进度</button>
+                </div>
+                <div class="input-hint">目标金额: ¥369,00</div>
+            </div>
+            
+            <div class="inspiration">
+                "伟大的目标需要坚持不懈的努力，每一次成功都是下一次挑战的起点。"
+            </div>
+        </div>
+    </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 设置起始和结束日期
-            const startDate = new Date('2025-08-11');
-            const endDate = new Date('2026-08-11');
-            const now = new Date();
+        // 初始化目标金额数据
+        let goals = {
+            computer: {
+                current: 0,
+                target: 5000,
+                percent: 0
+            },
+            motorcycle: {
+                current: 0,
+                target: 36900,
+                percent: 0
+            }
+        };
+        
+        // 从本地存储加载数据（如果存在）
+        function loadGoalsData() {
+            const savedData = localStorage.getItem('progressGoals');
+            if (savedData) {
+                try {
+                    goals = JSON.parse(savedData);
+                } catch (e) {
+                    console.error("Error loading saved data:", e);
+                }
+            }
+        }
+        
+        // 保存数据到本地存储
+        function saveGoalsData() {
+            localStorage.setItem('progressGoals', JSON.stringify(goals));
+        }
+        
+        // 更新电脑进度
+        function updateComputerProgress() {
+            const input = document.getElementById('computerInput');
+            const value = parseInt(input.value) || 0;
             
-            // 计算总天数
-            const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            // 确保不超过目标值
+            goals.computer.current = Math.min(value, goals.computer.target);
             
-            // 计算已过天数
-            const dayOfYear = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            // 计算百分比
+            goals.computer.percent = ((goals.computer.current / goals.computer.target) * 100).toFixed(1);
             
-            // 确保天数在有效范围内
-            const validDayOfYear = Math.min(Math.max(dayOfYear, 0), totalDays);
-            const daysRemaining = totalDays - validDayOfYear;
+            // 更新UI
+            document.getElementById('computerCurrent').textContent = goals.computer.current.toLocaleString();
+            document.getElementById('computerPercent').textContent = goals.computer.percent;
             
-            // 计算完成百分比
-            const percentComplete = ((validDayOfYear / totalDays) * 100).toFixed(2);
+            // 更新进度条
+            const progressBar = document.getElementById('computerProgressBar');
+            const progressText = document.getElementById('computerProgressText');
+            progressBar.style.width = goals.computer.percent + '%';
+            progressText.textContent = goals.computer.percent + '%';
             
-            // 更新显示元素
-            document.getElementById('dateDisplay').textContent = 
-                `今天是 ${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+            // 保存数据
+            saveGoalsData();
             
-            document.getElementById('dayOfYear').textContent = validDayOfYear;
-            document.getElementById('daysRemaining').textContent = daysRemaining;
-            document.getElementById('percentComplete').textContent = percentComplete + '%';
+            // 清空输入框
+            input.value = '';
             
-            // 设置进度条
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
+            // 显示成功消息
+            showNotification(`电脑进度已更新: ${goals.computer.percent}%`);
+        }
+        
+        // 更新摩托车进度
+        function updateMotorcycleProgress() {
+            const input = document.getElementById('motorcycleInput');
+            const value = parseInt(input.value) || 0;
             
-            // 使用动画效果显示进度
+            // 确保不超过目标值
+            goals.motorcycle.current = Math.min(value, goals.motorcycle.target);
+            
+            // 计算百分比
+            goals.motorcycle.percent = ((goals.motorcycle.current / goals.motorcycle.target) * 100).toFixed(1);
+            
+            // 更新UI
+            document.getElementById('motorcycleCurrent').textContent = goals.motorcycle.current.toLocaleString();
+            document.getElementById('motorcyclePercent').textContent = goals.motorcycle.percent;
+            
+            // 更新进度条
+            const progressBar = document.getElementById('motorcycleProgressBar');
+            const progressText = document.getElementById('motorcycleProgressText');
+            progressBar.style.width = goals.motorcycle.percent + '%';
+            progressText.textContent = goals.motorcycle.percent + '%';
+            
+            // 保存数据
+            saveGoalsData();
+            
+            // 清空输入框
+            input.value = '';
+            
+            // 显示成功消息
+            showNotification(`摩托车进度已更新: ${goals.motorcycle.percent}%`);
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            notification.style.color = 'white';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '1000';
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.3s';
+            notification.style.fontSize = '1rem';
+            notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            
+            document.body.appendChild(notification);
+            
+            // 显示通知
             setTimeout(() => {
-                progressBar.style.width = percentComplete + '%';
-                progressText.textContent = percentComplete + '%';
-            }, 500);
+                notification.style.opacity = '1';
+            }, 10);
             
-            // 设置浪漫语录
-            const quotes = [
-                "每一天都在向你靠近一点点...",
-                "等待是最长情的告白",
-                "时光飞逝，爱意渐浓",
-                "距离相见的日子又近了一天",
-                "时间的沙漏里，盛满思念",
-                "每一秒的等待都值得",
-                "爱是跨越时间的约定",
-                "我们的故事正在倒计时",
-                "心之所向，素履以往",
-                "在时光里种下爱的种子",
-                "每一天都在向你靠近一点点...",
-                "等待是最长情的告白，时间是最好的证明",
-                "时光飞逝，爱意渐浓，思念在时间中沉淀",
-                "距离相见的日子又近了一天，心跳又加速了一分",
-                "时间的沙漏里，盛满我对你的思念与期待",
-                "每一秒的等待，都让我们的相遇更加珍贵",
-                "爱是跨越时间的约定，心之所向终将抵达",
-                "我们的故事正在倒计时，每一页都值得珍藏",
-                "心之所向，素履以往，只为遇见最好的你",
-                "在时光里种下爱的种子，静待花开那一刻"
-            ];
-            
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById('inspiration').textContent = `"${randomQuote}"`;
+            // 隐藏通知
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 设置起始和结束日期（爱情目标）
+        const startDate = new Date('2025-08-11');
+        const endDate = new Date('2026-08-11');
+        const now = new Date();
+        
+        // 计算总天数
+        const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+        
+        // 计算已过天数
+        const dayOfYear = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
+        
+        // 确保天数在有效范围内
+        const validDayOfYear = Math.min(Math.max(dayOfYear, 0), totalDays);
+        const daysRemaining = totalDays - validDayOfYear;
+        
+        // 计算完成百分比
+        const percentComplete = ((validDayOfYear / totalDays) * 100).toFixed(1);
+        
+        // 更新显示元素
+        document.getElementById('dateDisplay').textContent = 
+            `今天是 ${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+        
+        document.getElementById('dayOfYear').textContent = validDayOfYear;
+        document.getElementById('daysRemaining').textContent = daysRemaining;
+        document.getElementById('percentComplete').textContent = percentComplete + '%';
+        
+        // 设置进度条
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        // 使用动画效果显示进度
+        setTimeout(() => {
+            progressBar.style.width = percentComplete + '%';
+            progressText.textContent = percentComplete + '%';
+        }, 800);
+        
+        // 设置浪漫语录
+        const quotes = [
+            "每一天都在向你靠近一点点...",
+            "等待是最长情的告白",
+            "时光飞逝，爱意渐浓",
+            "距离相见的日子又近了一天",
+            "时间的沙漏里，盛满思念",
+            "每一秒的等待都值得",
+            "爱是跨越时间的约定",
+            "我们的故事正在倒计时",
+            "心之所向，素履以往",
+            "在时光里种下爱的种子",
+            "等待是最长情的告白，时间是最好的证明",
+            "时光飞逝，爱意渐浓，思念在时间中沉淀",
+            "距离相见的日子又近了一天，心跳又加速了一分",
+            "时间的沙漏里，盛满我对你的思念与期待",
+            "每一秒的等待，都让我们的相遇更加珍贵",
+            "爱是跨越时间的约定，心之所向终将抵达",
+            "我们的故事正在倒计时，每一页都值得珍藏",
+            "心之所向，素履以往，只为遇见最好的你",
+            "在时光里种下爱的种子，静待花开那一刻"
+        ];
+        
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('inspiration').textContent = `"${randomQuote}"`;
+        
+        // 初始化容器动画状态
+        document.querySelectorAll('.container').forEach((container, index) => {
+            if (index === 0) {
+                container.classList.add('active');
+            }
         });
+        
+        // 滚动到指定区域
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+            
+            // 更新导航点
+            document.querySelectorAll('.nav-dot').forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            document.querySelector(`.nav-dot[data-title="${getSectionTitle(sectionId)}"]`).classList.add('active');
+        }
+        
+        // 获取区域标题
+        function getSectionTitle(sectionId) {
+            const titles = {
+                'love': '期待爱情',
+                'computer': '购买电脑',
+                'motorcycle': '购买摩托'
+            };
+            return titles[sectionId] || '';
+        }
+        
+        // 滚动时激活容器
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.container').forEach(container => {
+                const rect = container.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.8 && rect.bottom > 0) {
+                    container.classList.add('active');
+                }
+            });
+            
+            // 更新导航点
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    document.querySelectorAll('.nav-dot').forEach(dot => {
+                        dot.classList.remove('active');
+                    });
+                    
+                    const sectionId = section.id;
+                    document.querySelector(`.nav-dot[data-title="${getSectionTitle(sectionId)}"]`).classList.add('active');
+                }
+            });
+        });
+        
+        // 初始化页面
+        function initPage() {
+            // 加载本地存储的数据
+            loadGoalsData();
+            
+            // 初始化电脑进度
+            document.getElementById('computerCurrent').textContent = goals.computer.current.toLocaleString();
+            document.getElementById('computerPercent').textContent = goals.computer.percent;
+            
+            // 初始化摩托车进度
+            document.getElementById('motorcycleCurrent').textContent = goals.motorcycle.current.toLocaleString();
+            document.getElementById('motorcyclePercent').textContent = goals.motorcycle.percent;
+            
+            // 设置进度条动画
+            setTimeout(() => {
+                // 电脑进度条
+                const computerProgressBar = document.getElementById('computerProgressBar');
+                const computerProgressText = document.getElementById('computerProgressText');
+                computerProgressBar.style.width = goals.computer.percent + '%';
+                computerProgressText.textContent = goals.computer.percent + '%';
+                
+                // 摩托车进度条
+                const motorcycleProgressBar = document.getElementById('motorcycleProgressBar');
+                const motorcycleProgressText = document.getElementById('motorcycleProgressText');
+                motorcycleProgressBar.style.width = goals.motorcycle.percent + '%';
+                motorcycleProgressText.textContent = goals.motorcycle.percent + '%';
+            }, 1000);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initPage);
     </script>
 </body>
 </html>
