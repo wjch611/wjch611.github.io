@@ -32,7 +32,7 @@ tags = true
 
 [languages.en]
 generate_feeds = true
-description = "依旧未经沧海，一生寻找你的海洋！"
+description = "未经沧海~ ，一生寻找你的海洋！"
 
 [languages.en.translations]
 about = "About"
