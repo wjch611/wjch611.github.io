@@ -147,6 +147,7 @@
             color: var(--dark);
             opacity: 0.8;
             font-weight: 500;
+            transition: opacity 0.6s ease;
         }
         
         /* 天气选择器 */
@@ -865,16 +866,8 @@
             'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
             'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
             'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
             'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'
+            'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'
         ];
         
         // DOM元素
@@ -901,6 +894,7 @@
         const rainEffect = document.getElementById('rainEffect');
         const lightningEffect = document.getElementById('lightningEffect');
         const songCount = document.getElementById('songCount');
+        const subtitleEl = document.querySelector('.subtitle');
 
         // 状态变量
         let musicData = [];
@@ -912,6 +906,54 @@
         let currentBgIndex = 0;
         let bgInterval;
         let currentWeather = 'sunny';
+
+        // 语录数组（24条，页面加载随机显示一条，并每1分钟自动切换）
+        const quotes = [
+            "嘘...，你听清内心的声音了吗？",
+            "音乐是穿越灵魂的语言。",
+            "在静谧中，旋律开始说话。",
+            "让音符把孤独变成温柔的光。",
+            "有些故事，只能用歌声诉说。",
+            "闭上眼，世界只剩下节拍。",
+            "每一首歌，都是一段未完的旅行。",
+            "把烦恼寄给风，让旋律替你疗愈。",
+            "你在听的，不只是声音，还有回忆。",
+            "当夜深人静，音乐替你守夜。",
+            "在音乐里，失落也能找到方向。",
+            "旋律像秘密，悄悄贴近心房。",
+            "用心听，连寂寞都有了颜色。",
+            "一段和弦，足以点亮整颗星空。",
+            "把时间交给音乐，它会还你温柔。",
+            "听见心跳，就是最简单的节拍。",
+            "歌声里藏着未说出口的勇气。",
+            "让旋律带你回到那一刻的温度。",
+            "每次停顿，都是下一句的开始。",
+            "即便世界混乱，音符也会替你整理情绪。",
+            "在歌里，找到那个还没放弃的自己。",
+            "风声加上和弦，便是短暂的永恒。",
+            "让声音带路，你会遇见另一个自己。",
+            "夜里最亮的，不是星，而是心里的那首歌。"
+        ];
+        let lastQuoteIndex = -1;
+        function updateSubtitleRandom() {
+            if (!subtitleEl) return;
+            let idx = Math.floor(Math.random() * quotes.length);
+            // 避免连续相同
+            if (quotes.length > 1) {
+                let attempts = 0;
+                while (idx === lastQuoteIndex && attempts < 8) {
+                    idx = Math.floor(Math.random() * quotes.length);
+                    attempts++;
+                }
+            }
+            lastQuoteIndex = idx;
+            // 渐隐切换效果
+            subtitleEl.style.opacity = '0';
+            setTimeout(() => {
+                subtitleEl.textContent = quotes[idx];
+                subtitleEl.style.opacity = '0.95';
+            }, 300);
+        }
 
         // 初始化播放器
         async function initPlayer() {
@@ -953,6 +995,10 @@
             audio.addEventListener('loadedmetadata', () => {
                 durationEl.textContent = formatTime(audio.duration);
             });
+
+            // 初始化并每1分钟更换一次语录（加载时立刻显示一条）
+            updateSubtitleRandom();
+            setInterval(updateSubtitleRandom, 60 * 1000);
         }
 
         // 从指定目录加载音乐文件
