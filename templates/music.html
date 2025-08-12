@@ -455,16 +455,16 @@
             padding: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-            height: calc(100vh - 200px); /* 新增：固定高度 */
-            display: flex; /* 新增 */
-            flex-direction: column; /* 新增 */
+            height: calc(100vh - 200px); 
+            display: flex; 
+            flex-direction: column;
         }
         
         .playlist-content {
-            flex: 1; /* 新增 */
-            display: flex; /* 新增 */
-            flex-direction: column; /* 新增 */
-            overflow: hidden; /* 新增 */
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
         }
         
         .playlist-header {
@@ -510,9 +510,9 @@
         
         .playlist {
             list-style: none;
-            overflow-y: auto; /* 新增：启用垂直滚动 */
-            flex: 1; /* 新增：填充可用空间 */
-            max-height: 100%; /* 新增 */
+            overflow-y: auto; 
+            flex: 1; 
+            max-height: 100%; 
         }
         
         .playlist-item {
@@ -732,6 +732,21 @@
         .playlist::-webkit-scrollbar-thumb:hover {
             background: var(--primary);
         }
+
+        /* 按钮激活状态 */
+        .control-btn.active-mode {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--secondary);
+            box-shadow: 0 0 0 2px var(--secondary);
+        }
+        
+        .mode-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--dark);
+            opacity: 0.8;
+            height: 20px;
+        }
     </style>
 </head>
 <body>
@@ -749,7 +764,7 @@
     
     <div class="container">
         <header>
-            <h1><i class="fas fa-music"></i> </h1>
+            <h1><i class="fas fa-music"></i> 炫酷CD播放器</h1>
             <p class="subtitle">嘘...，你听清内心的声音了吗？</p>
             
             <!-- 天气选择器 -->
@@ -800,9 +815,16 @@
                     <button class="control-btn" id="nextBtn" title="下一首">
                         <i class="fas fa-step-forward"></i>
                     </button>
-                    <button class="control-btn" id="repeatBtn" title="重复播放">
+                    <button class="control-btn" id="sequentialBtn" title="顺序播放">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button class="control-btn" id="repeatBtn" title="单曲循环">
                         <i class="fas fa-redo"></i>
                     </button>
+                </div>
+                
+                <div class="mode-info" id="modeInfo">
+                    当前模式: 顺序播放
                 </div>
                 
                 <div class="volume-container">
@@ -876,6 +898,7 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const shuffleBtn = document.getElementById('shuffleBtn');
+        const sequentialBtn = document.getElementById('sequentialBtn');
         const repeatBtn = document.getElementById('repeatBtn');
         const volumeBtn = document.getElementById('volumeBtn');
         const volumeSlider = document.getElementById('volumeSlider');
@@ -895,19 +918,19 @@
         const lightningEffect = document.getElementById('lightningEffect');
         const songCount = document.getElementById('songCount');
         const subtitleEl = document.querySelector('.subtitle');
+        const modeInfo = document.getElementById('modeInfo');
 
         // 状态变量
         let musicData = [];
         let isPlaying = false;
         let currentSongIndex = 0;
-        let isShuffle = false;
-        let isRepeat = false;
+        let playMode = 'sequential'; // 'sequential', 'shuffle', 'repeat'
         let lastVolume = audio.volume;
         let currentBgIndex = 0;
         let bgInterval;
         let currentWeather = 'sunny';
 
-        // 语录数组（24条，页面加载随机显示一条，并每1分钟自动切换）
+        // 语录数组
         const quotes = [
             "嘘...，你听清内心的声音了吗？",
             "音乐是穿越灵魂的语言。",
@@ -977,12 +1000,16 @@
                 loadSong(currentSongIndex);
             }
             
+            // 更新模式按钮状态
+            updateModeButtons();
+            
             // 事件监听器
             playBtn.addEventListener('click', togglePlay);
             prevBtn.addEventListener('click', prevSong);
             nextBtn.addEventListener('click', nextSong);
-            shuffleBtn.addEventListener('click', toggleShuffle);
-            repeatBtn.addEventListener('click', toggleRepeat);
+            shuffleBtn.addEventListener('click', () => setPlayMode('shuffle'));
+            sequentialBtn.addEventListener('click', () => setPlayMode('sequential'));
+            repeatBtn.addEventListener('click', () => setPlayMode('repeat'));
             volumeBtn.addEventListener('click', toggleMute);
             volumeSlider.addEventListener('input', setVolume);
             progressContainer.addEventListener('click', setProgress);
@@ -991,12 +1018,12 @@
             
             // 音频事件监听
             audio.addEventListener('timeupdate', updateProgress);
-            audio.addEventListener('ended', nextSong);
+            audio.addEventListener('ended', handleEnded);
             audio.addEventListener('loadedmetadata', () => {
                 durationEl.textContent = formatTime(audio.duration);
             });
 
-            // 初始化并每1分钟更换一次语录（加载时立刻显示一条）
+            // 初始化并每1分钟更换一次语录
             updateSubtitleRandom();
             setInterval(updateSubtitleRandom, 60 * 1000);
         }
@@ -1150,6 +1177,37 @@
             setWeather(weatherSelect.value);
         }
         
+        // 设置播放模式
+        function setPlayMode(mode) {
+            playMode = mode;
+            updateModeButtons();
+            
+            // 更新模式信息
+            const modeNames = {
+                sequential: '顺序播放',
+                shuffle: '随机播放',
+                repeat: '单曲循环'
+            };
+            modeInfo.textContent = `当前模式: ${modeNames[mode]}`;
+        }
+        
+        // 更新模式按钮状态
+        function updateModeButtons() {
+            // 移除所有按钮的激活状态
+            shuffleBtn.classList.remove('active-mode');
+            sequentialBtn.classList.remove('active-mode');
+            repeatBtn.classList.remove('active-mode');
+            
+            // 为当前模式添加激活状态
+            if (playMode === 'shuffle') {
+                shuffleBtn.classList.add('active-mode');
+            } else if (playMode === 'sequential') {
+                sequentialBtn.classList.add('active-mode');
+            } else if (playMode === 'repeat') {
+                repeatBtn.classList.add('active-mode');
+            }
+        }
+        
         // 加载歌曲
         function loadSong(index) {
             if (index < 0 || index >= musicData.length) return;
@@ -1220,28 +1278,36 @@
         function nextSong() {
             if (musicData.length === 0) return;
             
-            if (isShuffle) {
+            if (playMode === 'shuffle') {
                 let newIndex;
                 do {
                     newIndex = Math.floor(Math.random() * musicData.length);
                 } while (newIndex === currentSongIndex && musicData.length > 1);
                 
                 currentSongIndex = newIndex;
-            } else {
+            } else if (playMode === 'sequential') {
                 currentSongIndex++;
                 if (currentSongIndex >= musicData.length) {
-                    if (isRepeat) {
-                        currentSongIndex = 0;
-                    } else {
-                        pauseSong();
-                        currentSongIndex = musicData.length - 1;
-                        return;
-                    }
+                    currentSongIndex = 0;
                 }
             }
             
-            loadSong(currentSongIndex);
-            playSong();
+            // 在单曲循环模式下，nextSong() 仍然会切换到下一首
+            if (playMode !== 'repeat') {
+                loadSong(currentSongIndex);
+                playSong();
+            }
+        }
+        
+        // 处理歌曲结束
+        function handleEnded() {
+            if (playMode === 'repeat') {
+                // 单曲循环模式下，重新播放当前歌曲
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                nextSong();
+            }
         }
 
         // 更新进度条
@@ -1286,20 +1352,6 @@
                     item.style.display = 'none';
                 }
             });
-        }
-
-        // 切换随机播放
-        function toggleShuffle() {
-            isShuffle = !isShuffle;
-            shuffleBtn.style.color = isShuffle ? 'var(--secondary)' : 'var(--dark)';
-            shuffleBtn.style.background = isShuffle ? 'rgba(255, 107, 107, 0.15)' : 'rgba(255, 255, 255, 0.7)';
-        }
-
-        // 切换重复播放
-        function toggleRepeat() {
-            isRepeat = !isRepeat;
-            repeatBtn.style.color = isRepeat ? 'var(--secondary)' : 'var(--dark)';
-            repeatBtn.style.background = isRepeat ? 'rgba(255, 107, 107, 0.15)' : 'rgba(255, 255, 255, 0.7)';
         }
 
         // 切换静音
