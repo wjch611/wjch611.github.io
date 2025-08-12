@@ -307,7 +307,7 @@
         
         .song-info {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             width: 100%;
         }
         
@@ -329,11 +329,55 @@
             font-weight: 500;
         }
         
+        /* 歌词容器 */
+        .lyrics-container {
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .lyrics-line {
+            padding: 5px 0;
+            color: var(--dark);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .lyrics-line.active {
+            color: var(--secondary);
+            opacity: 1;
+            font-weight: 600;
+            transform: scale(1.05);
+        }
+        
+        /* 隐藏歌词滚动条 */
+        .lyrics-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .lyrics-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
         .progress-container {
             background: rgba(255, 255, 255, 0.6);
             height: 8px;
             border-radius: 10px;
-            margin: 30px 0;
+            margin: 20px 0;
             cursor: pointer;
             position: relative;
             width: 100%;
@@ -378,7 +422,7 @@
             justify-content: center;
             align-items: center;
             gap: 25px;
-            margin: 30px 0;
+            margin: 25px 0;
         }
         
         .control-btn {
@@ -425,7 +469,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
             width: 100%;
             padding: 0 20px;
         }
@@ -630,6 +674,11 @@
                 height: 250px;
             }
             
+            .lyrics-container {
+                height: 80px;
+                font-size: 1rem;
+            }
+            
             .controls {
                 gap: 15px;
             }
@@ -794,6 +843,11 @@
                     <p class="song-artist" id="songArtist">请稍候</p>
                 </div>
                 
+                <!-- 歌词容器 -->
+                <div class="lyrics-container" id="lyricsContainer">
+                    <div class="lyrics-line active">加载歌词中...</div>
+                </div>
+                
                 <div class="progress-container" id="progressContainer">
                     <div class="progress" id="progress"></div>
                 </div>
@@ -862,7 +916,9 @@
     <script>
         // 音乐目录
         const MUSIC_DIR = "/musics/";
-        
+        // 歌词目录
+        const LYRIC_DIR = "/lyrics/";
+
         // 背景图片数组 (增加到30张)
         const backgroundImages = [
             'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
@@ -919,6 +975,7 @@
         const songCount = document.getElementById('songCount');
         const subtitleEl = document.querySelector('.subtitle');
         const modeInfo = document.getElementById('modeInfo');
+        const lyricsContainer = document.getElementById('lyricsContainer');
 
         // 状态变量
         let musicData = [];
@@ -929,6 +986,8 @@
         let currentBgIndex = 0;
         let bgInterval;
         let currentWeather = 'sunny';
+        let lyrics = []; // 存储当前歌曲的歌词数组
+        let currentLyricIndex = -1; // 当前显示的歌词索引
 
         // 语录数组
         const quotes = [
@@ -1033,19 +1092,7 @@
             try {
                 // 模拟从目录加载音乐文件
                 const files = [
-                    "小红花-赵英俊.mp3",
-                    "The fear in my heart-朴树.mp3",
-                    "Vincent-Don McLean.mp3",
-                    "白鸽-伍佰 & China Blue.mp3",
-                    "船长-赵雷.mp3",
-                    "吉姆餐厅-赵雷.mp3",
-                    "恋恋风尘-老狼.mp3",
-                    "猎户星座-朴树.mp3",
-                    "梦中的哈德森-赵雷.mp3",
-                    "七月上-Jam.mp3",
-                    "星尘-周昭妍.mp3",
-                    "一万次悲伤-逃跑计划.mp3",
-                    "最美的期待-南征北战.mp3"
+                    "小红花-赵英俊.mp3"
                 ];
                 
                 // 创建音乐数据
@@ -1156,6 +1203,26 @@
                 createRaindrops();
                 lightningEffect.style.animation = 'lightning 7s infinite';
             }
+
+            // 更新歌词容器背景根据天气
+            let lyricsBg;
+            switch (weatherType) {
+                case 'sunny':
+                    lyricsBg = 'linear-gradient(135deg, rgba(255, 200, 0, 0.1), rgba(255, 150, 0, 0.15))';
+                    break;
+                case 'night':
+                    lyricsBg = 'rgba(0, 0, 40, 0.35)';
+                    break;
+                case 'rain':
+                    lyricsBg = 'rgba(0, 50, 100, 0.2)';
+                    break;
+                case 'storm':
+                    lyricsBg = 'rgba(0, 0, 20, 0.4)';
+                    break;
+                default:
+                    lyricsBg = 'rgba(255, 255, 255, 0.3)';
+            }
+            lyricsContainer.style.background = lyricsBg;
         }
         
         // 创建雨滴效果
@@ -1227,6 +1294,115 @@
             } else {
                 albumArt.classList.remove('playing');
             }
+            
+            // 重置歌词状态
+            lyrics = [];
+            currentLyricIndex = -1;
+            lyricsContainer.innerHTML = '<div class="lyrics-line active">加载歌词中...</div>';
+            
+            // 加载歌词文件
+            loadLyrics(song.title);
+        }
+        
+        // 解析LRC歌词
+        function parseLrc(text) {
+            const lines = text.split('\n');
+            const result = [];
+            const timeRegex = /\[(\d{2}):(\d{2})\.(\d{2})\]/;
+
+            lines.forEach(line => {
+                const match = timeRegex.exec(line);
+                if (match) {
+                    const minutes = parseInt(match[1]);
+                    const seconds = parseInt(match[2]);
+                    const milliseconds = parseInt(match[3]) / 100;
+                    const time = minutes * 60 + seconds + milliseconds;
+                    const text = line.replace(timeRegex, '').trim();
+                    if (text) {
+                        result.push({ time, text });
+                    }
+                }
+            });
+
+            return result;
+        }
+        
+        // 加载歌词
+        function loadLyrics(songTitle) {
+            // 构造歌词文件路径
+            const lyricPath = `${LYRIC_DIR}${songTitle}.lrc`;
+            
+            fetch(lyricPath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('歌词文件未找到');
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    lyrics = parseLrc(text);
+                    // 初始化歌词显示
+                    updateLyricsDisplay();
+                })
+                .catch(error => {
+                    console.error('加载歌词失败:', error);
+                    lyrics = [];
+                    lyricsContainer.innerHTML = '<div class="lyrics-line active">暂无歌词</div>';
+                });
+        }
+        
+        // 更新歌词显示
+        function updateLyricsDisplay() {
+            if (lyrics.length === 0) {
+                lyricsContainer.innerHTML = '<div class="lyrics-line active">暂无歌词</div>';
+                return;
+            }
+            
+            // 创建歌词行
+            lyricsContainer.innerHTML = '';
+            
+            // 显示当前歌词及前后几句
+            const startIndex = Math.max(0, currentLyricIndex - 2);
+            const endIndex = Math.min(lyrics.length - 1, currentLyricIndex + 2);
+            
+            for (let i = startIndex; i <= endIndex; i++) {
+                const lyricLine = document.createElement('div');
+                lyricLine.className = 'lyrics-line';
+                if (i === currentLyricIndex) {
+                    lyricLine.classList.add('active');
+                }
+                lyricLine.textContent = lyrics[i].text || '♪';
+                lyricsContainer.appendChild(lyricLine);
+            }
+            
+            // 滚动到当前歌词位置
+            const activeLine = lyricsContainer.querySelector('.lyrics-line.active');
+            if (activeLine) {
+                activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // 更新当前歌词
+        function updateLyrics() {
+            if (lyrics.length === 0 || isNaN(audio.currentTime)) return;
+            
+            const currentTime = audio.currentTime;
+            
+            // 查找当前时间对应的歌词索引
+            let newIndex = -1;
+            for (let i = 0; i < lyrics.length; i++) {
+                if (currentTime >= lyrics[i].time) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+            
+            // 如果没有找到，或者索引没有变化，则返回
+            if (newIndex === -1 || newIndex === currentLyricIndex) return;
+            
+            currentLyricIndex = newIndex;
+            updateLyricsDisplay();
         }
 
         // 播放歌曲
@@ -1316,6 +1492,9 @@
             const progressPercent = (currentTime / duration) * 100;
             progress.style.width = `${progressPercent}%`;
             currentTimeEl.textContent = formatTime(currentTime);
+            
+            // 更新歌词显示
+            updateLyrics();
         }
 
         // 设置进度
