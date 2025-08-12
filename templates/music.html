@@ -335,7 +335,7 @@
         .lyrics-container {
             width: 100%;
             height: 100px;
-            overflow: hidden;
+            overflow-y: auto;
             text-align: center;
             margin: 15px 0;
             padding: 10px;
@@ -345,7 +345,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             font-size: 1.1rem;
             line-height: 1.6;
         }
@@ -1409,7 +1409,7 @@
                 .then(text => {
                     lyrics = parseLrc(text);
                     // 初始化歌词显示
-                    updateLyricsDisplay();
+                    renderLyrics();
                 })
                 .catch(error => {
                     console.error('加载歌词失败:', error);
@@ -1417,36 +1417,35 @@
                     lyricsContainer.innerHTML = '<div class="lyrics-line active">暂无歌词</div>';
                 });
         }
-        
-        // 更新歌词显示
-        function updateLyricsDisplay() {
+
+        // 渲染所有歌词
+        function renderLyrics() {
             if (lyrics.length === 0) {
                 lyricsContainer.innerHTML = '<div class="lyrics-line active">暂无歌词</div>';
                 return;
             }
-            
-            // 创建歌词行
+
             lyricsContainer.innerHTML = '';
-            
-            // 显示当前歌词及前后几句
-            const startIndex = Math.max(0, currentLyricIndex - 2);
-            const endIndex = Math.min(lyrics.length - 1, currentLyricIndex + 2);
-            
-            for (let i = startIndex; i <= endIndex; i++) {
+
+            lyrics.forEach(lyric => {
                 const lyricLine = document.createElement('div');
                 lyricLine.className = 'lyrics-line';
-                if (i === currentLyricIndex) {
-                    lyricLine.classList.add('active');
-                }
-                lyricLine.textContent = lyrics[i].text || '♪';
+                lyricLine.textContent = lyric.text || '♪';
                 lyricsContainer.appendChild(lyricLine);
-            }
-            
-            // 滚动到当前歌词位置
-            const activeLine = lyricsContainer.querySelector('.lyrics-line.active');
-            if (activeLine) {
-                activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            });
+        }
+        
+        // 更新歌词显示
+        function highlightCurrentLyric() {
+            const lines = lyricsContainer.querySelectorAll('.lyrics-line');
+            lines.forEach((line, i) => {
+                if (i === currentLyricIndex) {
+                    line.classList.add('active');
+                    line.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    line.classList.remove('active');
+                }
+            });
         }
         
         // 更新当前歌词
@@ -1469,7 +1468,7 @@
             if (newIndex === -1 || newIndex === currentLyricIndex) return;
             
             currentLyricIndex = newIndex;
-            updateLyricsDisplay();
+            highlightCurrentLyric();
         }
 
         // 播放歌曲
