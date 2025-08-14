@@ -90,9 +90,14 @@
           <img src="{{ get_url(path='images/logo.png') }}" alt="Logo">
         </div>
         <h1><a href="{{ get_url(path='@/_index.md') }}">{{ config.title }}</a></h1>
-        <div class="description">
-          <p>{{ config.description }}</p>
-          <p>{{ "test!" }}</p>
+        <div class="description" id="site-description" data-interval="{{ config.languages.en.description_interval }}">
+        {% if config.languages.en.description_list %}
+          {% for d in config.languages.en.description_list %}
+            <p class="desc-item{% if loop.index0 != 0 %} hidden{% endif %}">{{ d }}</p>
+          {% endfor %}
+        {% else %}
+          <p class="desc-item">{{ config.languages.en.description }}</p>
+        {% endif %}
         </div>
       </div>
     </div>
@@ -156,4 +161,52 @@
   </div>
 </body>
 
+<script>
+(function () {
+  var container = document.getElementById('site-description');
+  if (!container) return;
+
+  var items = Array.prototype.slice.call(container.querySelectorAll('.desc-item'));
+  if (!items.length) return;
+
+  // 读取 interval（毫秒），没有就 3000
+  var interval = parseInt(container.getAttribute('data-interval')) || 3000;
+  if (items.length === 1) return; // 只有一条则不轮播
+
+  var current = 0;
+  // 初始：确保只有 current 可见（CSS 已处理 hidden）
+  items.forEach(function(it, i){
+    it.style.transition = "opacity 0.6s ease";
+    if (i !== 0) {
+      it.style.opacity = 0;
+      it.style.pointerEvents = 'none';
+    } else {
+      it.style.opacity = 1;
+    }
+  });
+
+  setInterval(function () {
+    var next = (current + 1) % items.length;
+    // fade out current, fade in next
+    items[current].style.opacity = 0;
+    items[current].style.pointerEvents = 'none';
+    items[next].style.opacity = 1;
+    items[next].style.pointerEvents = 'auto';
+    current = next;
+  }, interval);
+})();
+</script>
+<style>
+.description { position: relative; min-height: 1.4em; }
+.description .desc-item { 
+  position: absolute; left: 0; top: 0; width: 100%;
+  margin: 0;
+  opacity: 1;
+  transition: opacity .6s ease;
+  /* 可按需调整文字样式 */
+}
+.description .desc-item.hidden { opacity: 0; pointer-events: none; }
+</style>
 </html>
+
+
