@@ -33,8 +33,6 @@ tags = true
 [languages.en]
 generate_feeds = true
 description = "虽千万人，吾往矣！"
-description_list = ["虽千万人，吾往矣！", "热爱学习，享受折腾。", "代码与生活，皆需热情。"]
-description_interval = 3000   # 毫秒，3秒切换一次
 
 [languages.en.translations]
 about = "About"
