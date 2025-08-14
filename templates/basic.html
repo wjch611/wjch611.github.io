@@ -97,11 +97,13 @@
     });
   </script>
   <style>
-    .underline {
-      font-size: 15px; /* 设置字体大小 */
-      font-style: italic; /* 设置斜体 */
-      height: 20px; /* 固定高度 */
-    }
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
   </style>
 </head>
 
@@ -114,7 +116,7 @@
         </div>
         <h1><a href="{{ get_url(path='@/_index.md') }}">{{ config.title }}</a></h1>
         <div class="subtitle">
-            <p>{{ <span id="typed-text"></span> }}</p>
+            <span id="typed-text"></span>
         </div>
       </div>
     </div>
