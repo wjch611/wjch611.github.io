@@ -4,29 +4,6 @@ template: "about.html"
 paginate_by: 0
 ---
 
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    new Typed("#typed-text", {
-      strings: [
-        "悟已往之不谏 知来者之可追",
-        "真正的强者，敢于逆流而上！！！"
-      ], // 每一段文字
-      typeSpeed: 50, // 打字速度
-      backSpeed: 30, // 删除速度
-      loop: true, // 是否循环
-      backDelay: 1000, // 删除前的停顿时间
-      showCursor: false, // 隐藏光标
-    });
-  });
-</script>
-<style>
-  .underline {
-    font-size: 15px; /* 设置字体大小 */
-    font-style: italic; /* 设置斜体 */
-    height: 20px; /* 固定高度 */
-  }
-</style>
 
 > <div id="typed-text" class="underline"></div> <!-- 添加 class -->
 
@@ -52,10 +29,4 @@ paginate_by: 0
 ## 联系方式
 📫 Email: changwanwen2@gmail.com  
 💬 WeChat: 19979658101
-
-
-
-
-
-
 
