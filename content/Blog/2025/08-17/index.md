@@ -1,5 +1,5 @@
 ---
-title: 第四次破戒！继续失败，依旧失败！
+title: 再给自己一次机会！
 date: 2025-08-17
 taxonomies:
   tags:
