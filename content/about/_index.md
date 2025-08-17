@@ -4,9 +4,6 @@ template: "about.html"
 paginate_by: 0
 ---
 
-
-> <div id="typed-text" class="underline"></div> <!-- 添加 class -->
-
 ---
 ## Hi there 👋
 
