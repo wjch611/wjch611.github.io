@@ -144,7 +144,6 @@
         <li><a {% if language_site_path is starting_with("/music") %}class="current" {% endif %} href="{{ get_url(path="@/music/_index.md", lang=lang) }}">{{ trans(key="music", lang=lang) }}</a></li>
         <li><a {% if language_site_path is starting_with("/about") %}class="current" {% endif %} href="{{ get_url(path="@/about/_index.md", lang=lang) }}">{{ trans(key="about", lang=lang) }}</a></li>
         {% if config.extra.show.links %}
-        <li><a {% if language_site_path is starting_with("/flags") %}class="current" {% endif %} href="{{ get_url(path="@/flags/_index.md", lang=lang) }}">{{ trans(key="flags", lang=lang) }}</a></li>
         {% endif %}
       </div>
     </div>
