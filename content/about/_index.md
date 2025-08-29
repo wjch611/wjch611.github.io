@@ -24,6 +24,8 @@ paginate_by: 0
 - 2024.06 - 2024.7：🚴‍♀️骑行川藏线
 
 ## 联系方式
-📫 Email: changwanwen2@gmail.com  
+📫 Email: changwanwen2@gmail.com、3394009106@qq.com
+
+
 💬 WeChat: 19979658101
 
