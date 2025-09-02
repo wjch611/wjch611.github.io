@@ -12,6 +12,7 @@
             --danger-color: #e74c3c;
             --dark-color: #2c3e50;
             --light-color: #ecf0f1;
+            --star-color: #f1c40f;
         }
         
         body {
@@ -68,7 +69,12 @@
             font-size: 3rem;
             font-weight: bold;
             margin: 20px 0;
-            color: #2c3e50;
+            color: var(--star-color);
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+        }
+        
+        .negative-stars {
+            color: var(--danger-color);
         }
         
         .task-form {
@@ -164,6 +170,26 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .chart-type-toggle {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chart-type-btn {
+            padding: 8px 15px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chart-type-btn.active {
+            background-color: var(--primary-color);
+            color: white;
         }
         
         .modal {
@@ -255,6 +281,18 @@
             display: none;
         }
         
+        .chart-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .negative-info {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        
         @media (max-width: 768px) {
             .dashboard {
                 grid-template-columns: 1fr;
@@ -263,6 +301,11 @@
             .reset-btn {
                 position: static;
                 margin-top: 15px;
+            }
+            
+            .time-navigation {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
@@ -280,6 +323,7 @@
                 <h2>当前星星数</h2>
                 <div id="stars-count" class="stars-count">0</div>
                 <p id="motivational-text">开始积累你的星星吧！</p>
+                <p id="stars-explanation" class="negative-info">星星数量可以是负数，代表你欠命运的债</p>
             </div>
             
             <div class="stats-card">
@@ -287,6 +331,7 @@
                 <p id="current-date">加载中...</p>
                 <p id="task-setting-status">检查任务设置时间...</p>
                 <p id="tasks-summary">今日任务: 0 已设置, 0 已完成</p>
+                <p id="task-explanation">任务完成情况不能为负数，代表你实际完成的任务数量</p>
             </div>
         </div>
         
@@ -309,13 +354,18 @@
         </div>
         
         <div class="chart-container">
-            <h2>任务完成历史</h2>
+            <h2>任务统计历史</h2>
             <div class="time-navigation">
                 <button id="prev-period">← 前一周</button>
                 <span id="chart-period">本周</span>
                 <button id="next-period">下一周 →</button>
+                <div class="chart-type-toggle">
+                    <button id="tasks-chart-btn" class="chart-type-btn active">任务完成</button>
+                    <button id="stars-chart-btn" class="chart-type-btn">星星数量</button>
+                </div>
             </div>
             <canvas id="tasks-chart"></canvas>
+            <p class="chart-info" id="chart-info">点击图表上的数据点查看每日详情</p>
         </div>
     </div>
     
@@ -371,6 +421,7 @@
             let todayTasks = [];
             let historyData = {};
             let currentChartPeriod = 0; // 0表示当前周，负数表示过去，正数表示未来
+            let currentChartType = 'tasks'; // 'tasks' 或 'stars'
             
             // DOM元素
             const starsCountEl = document.getElementById('stars-count');
@@ -386,6 +437,8 @@
             const chartPeriod = document.getElementById('chart-period');
             const prevPeriodBtn = document.getElementById('prev-period');
             const nextPeriodBtn = document.getElementById('next-period');
+            const tasksChartBtn = document.getElementById('tasks-chart-btn');
+            const starsChartBtn = document.getElementById('stars-chart-btn');
             const dayDetailModal = document.getElementById('day-detail-modal');
             const modalDate = document.getElementById('modal-date');
             const dayDetails = document.getElementById('day-details');
@@ -399,6 +452,7 @@
             const resetConfirmModal = document.getElementById('reset-confirm-modal');
             const confirmResetBtn = document.getElementById('confirm-reset-btn');
             const cancelResetBtn = document.getElementById('cancel-reset-btn');
+            const chartInfo = document.getElementById('chart-info');
             
             // Chart.js实例
             let tasksChartInstance;
@@ -468,15 +522,15 @@
                 const now = new Date();
                 const hours = now.getHours();
                 
-                if (hours >= 100) {
-                    // 7点后，不能设置任务
-                    taskSettingStatus.textContent = "今日100点后不可再设置任务，请明日100点前设置";
+                if (hours >= 25) {
+                    // 25点后，不能设置任务
+                    taskSettingStatus.textContent = "今日25点后不可再设置任务，请明日25点前设置";
                     taskSettingStatus.style.color = "var(--danger-color)";
                     newTaskInput.disabled = true;
                     addTaskBtn.disabled = true;
                 } else {
-                    // 7点前，可以设置任务
-                    taskSettingStatus.textContent = "请在今日100点前设置任务";
+                    // 25点前，可以设置任务
+                    taskSettingStatus.textContent = "请在今日25点前设置任务";
                     taskSettingStatus.style.color = "var(--secondary-color)";
                     newTaskInput.disabled = false;
                     addTaskBtn.disabled = false;
@@ -485,7 +539,13 @@
             
             // 渲染星星（仅显示数字）
             function renderStars() {
+                // 更新星星显示，支持负数
                 starsCountEl.textContent = currentStars;
+                if (currentStars < 0) {
+                    starsCountEl.classList.add('negative-stars');
+                } else {
+                    starsCountEl.classList.remove('negative-stars');
+                }
                 
                 // 更新激励文本
                 if (currentStars >= 100) {
@@ -608,12 +668,8 @@
                 
                 // 记录历史数据
                 const completedCount = yesterdayTasks.filter(task => task.completed).length;
-                historyData[yesterdayString] = {
-                    totalTasks: yesterdayTasks.length,
-                    completedTasks: completedCount
-                };
                 
-                // 计算星星变化
+                // 计算星星变化 - 确保已完成任务数量不为负数
                 if (yesterdayTasks.length === 0) {
                     // 没有设置任务，扣一颗星
                     currentStars--;
@@ -634,6 +690,14 @@
                         showNotification('昨日任务结算：无变化');
                     }
                 }
+                
+                // 记录历史数据，包括当天的星星数量
+                // 确保已完成任务数量不为负数
+                historyData[yesterdayString] = {
+                    totalTasks: yesterdayTasks.length,
+                    completedTasks: Math.max(0, completedCount), // 确保不为负数
+                    stars: currentStars // 记录当天的星星数量
+                };
                 
                 renderStars();
                 saveData();
@@ -659,7 +723,8 @@
                             pointHoverBackgroundColor: '#fff',
                             pointHoverBorderColor: 'rgba(46, 204, 113, 1)',
                             pointRadius: 5,
-                            pointHoverRadius: 7
+                            pointHoverRadius: 7,
+                            fill: true
                         }]
                     },
                     options: {
@@ -667,10 +732,15 @@
                         maintainAspectRatio: false,
                         scales: {
                             y: {
-                                beginAtZero: true,
+                                beginAtZero: true, // 任务完成数量从0开始
                                 title: {
                                     display: true,
                                     text: '完成任务数'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value;
+                                    }
                                 }
                             },
                             x: {
@@ -706,7 +776,8 @@
             function updateChart() {
                 // 获取最近两周的日期
                 const dates = [];
-                const completedData = [];
+                const tasksData = [];
+                const starsData = [];
                 
                 const today = new Date();
                 for (let i = 13 + currentChartPeriod * 7; i >= currentChartPeriod * 7; i--) {
@@ -717,14 +788,61 @@
                     dates.push(dateString);
                     
                     if (historyData[dateString]) {
-                        completedData.push(historyData[dateString].completedTasks);
+                        tasksData.push(historyData[dateString].completedTasks);
+                        starsData.push(historyData[dateString].stars || 0);
                     } else {
-                        completedData.push(null);
+                        tasksData.push(null);
+                        starsData.push(null);
                     }
                 }
                 
+                // 根据当前图表类型更新数据
+                if (currentChartType === 'tasks') {
+                    tasksChartInstance.data.datasets[0].label = '完成任务数量';
+                    tasksChartInstance.data.datasets[0].data = tasksData;
+                    tasksChartInstance.data.datasets[0].backgroundColor = 'rgba(46, 204, 113, 0.2)';
+                    tasksChartInstance.data.datasets[0].borderColor = 'rgba(46, 204, 113, 1)';
+                    tasksChartInstance.options.scales.y.title.text = '完成任务数';
+                    tasksChartInstance.options.scales.y.beginAtZero = true; // 确保从0开始
+                    tasksChartInstance.options.plugins.tooltip.callbacks.label = function(context) {
+                        return `完成任务: ${context.raw}`;
+                    };
+                    chartInfo.textContent = "点击图表上的数据点查看每日详情 - 任务完成数量不能为负数";
+                } else {
+                    tasksChartInstance.data.datasets[0].label = '星星数量';
+                    tasksChartInstance.data.datasets[0].data = starsData;
+                    tasksChartInstance.data.datasets[0].backgroundColor = 'rgba(241, 196, 15, 0.2)';
+                    tasksChartInstance.data.datasets[0].borderColor = 'rgba(241, 196, 15, 1)';
+                    tasksChartInstance.options.scales.y.title.text = '星星数量';
+                    tasksChartInstance.options.scales.y.beginAtZero = false; // 允许从负数开始
+                    tasksChartInstance.options.plugins.tooltip.callbacks.label = function(context) {
+                        return `星星数量: ${context.raw}`;
+                    };
+                    chartInfo.textContent = "点击图表上的数据点查看每日详情 - 星星数量可能为负数";
+                }
+                
                 tasksChartInstance.data.labels = dates;
-                tasksChartInstance.data.datasets[0].data = completedData;
+                
+                // 确保y轴从合适的值开始
+                const allValues = currentChartType === 'tasks' ? tasksData : starsData;
+                const minValue = Math.min(...allValues.filter(val => val !== null));
+                const maxValue = Math.max(...allValues.filter(val => val !== null));
+                
+                // 设置合适的y轴范围
+                if (currentChartType === 'tasks') {
+                    // 任务完成数量：从0开始
+                    tasksChartInstance.options.scales.y.suggestedMin = 0;
+                    tasksChartInstance.options.scales.y.suggestedMax = Math.ceil(maxValue * 1.1);
+                } else {
+                    // 星星数量：允许负数
+                    if (minValue < 0) {
+                        tasksChartInstance.options.scales.y.suggestedMin = Math.floor(minValue * 1.1);
+                    } else {
+                        tasksChartInstance.options.scales.y.suggestedMin = 0;
+                    }
+                    tasksChartInstance.options.scales.y.suggestedMax = Math.ceil(maxValue * 1.1);
+                }
+                
                 tasksChartInstance.update();
                 
                 // 更新图表期间显示
@@ -742,6 +860,22 @@
                 nextPeriodBtn.disabled = currentChartPeriod >= 0;
             }
             
+            // 切换图表类型
+            function toggleChartType(type) {
+                currentChartType = type;
+                
+                // 更新按钮状态
+                if (type === 'tasks') {
+                    tasksChartBtn.classList.add('active');
+                    starsChartBtn.classList.remove('active');
+                } else {
+                    tasksChartBtn.classList.remove('active');
+                    starsChartBtn.classList.add('active');
+                }
+                
+                updateChart();
+            }
+            
             // 显示某天的详情
             function showDayDetails(dateString) {
                 const date = new Date(dateString);
@@ -756,6 +890,11 @@
                     const summary = document.createElement('p');
                     summary.innerHTML = `<strong>完成任务:</strong> ${data.completedTasks}/${data.totalTasks}`;
                     dayDetails.appendChild(summary);
+                    
+                    const stars = document.createElement('p');
+                    const starsValue = data.stars || 0;
+                    stars.innerHTML = `<strong>当日星星数:</strong> <span class="${starsValue < 0 ? 'negative-stars' : ''}">${starsValue}</span>`;
+                    dayDetails.appendChild(stars);
                     
                     // 尝试获取当天的任务列表
                     const tasks = JSON.parse(localStorage.getItem(`tasks_${dateString}`) || '[]');
@@ -853,6 +992,9 @@
                     currentChartPeriod++;
                     updateChart();
                 });
+                
+                tasksChartBtn.addEventListener('click', () => toggleChartType('tasks'));
+                starsChartBtn.addEventListener('click', () => toggleChartType('stars'));
                 
                 document.querySelectorAll('.close-modal').forEach(closeBtn => {
                     closeBtn.addEventListener('click', function() {
