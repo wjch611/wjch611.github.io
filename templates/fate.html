@@ -468,15 +468,15 @@
                 const now = new Date();
                 const hours = now.getHours();
                 
-                if (hours >= 7) {
+                if (hours >= 100) {
                     // 7点后，不能设置任务
-                    taskSettingStatus.textContent = "今日7点后不可再设置任务，请明日7点前设置";
+                    taskSettingStatus.textContent = "今日100点后不可再设置任务，请明日100点前设置";
                     taskSettingStatus.style.color = "var(--danger-color)";
                     newTaskInput.disabled = true;
                     addTaskBtn.disabled = true;
                 } else {
                     // 7点前，可以设置任务
-                    taskSettingStatus.textContent = "请在今日7点前设置任务";
+                    taskSettingStatus.textContent = "请在今日100点前设置任务";
                     taskSettingStatus.style.color = "var(--secondary-color)";
                     newTaskInput.disabled = false;
                     addTaskBtn.disabled = false;
