@@ -143,6 +143,7 @@
         {% endif %}
         {% if config.extra.show.links %}
         <li><a {% if language_site_path is starting_with("/fate") %}class="current" {% endif %} href="{{ get_url(path="@/fate/_index.md", lang=lang) }}">{{ trans(key="fate", lang=lang) }}</a></li>
+        <li><a {% if language_site_path is starting_with("/study") %}class="current" {% endif %} href="{{ get_url(path="@/study/_index.md", lang=lang) }}">{{ trans(key="study", lang=lang) }}</a></li>
         {% endif %}
       </div>
     </div>
