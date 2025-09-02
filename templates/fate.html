@@ -809,14 +809,14 @@
                     };
                     chartInfo.textContent = "点击图表上的数据点查看每日详情 - 任务完成数量不能为负数";
                 } else {
-                    tasksChartInstance.data.datasets[0].label = '星星数量';
+                    tasksChartInstance.data.datasets[0].label = '历史星星数';
                     tasksChartInstance.data.datasets[0].data = starsData;
                     tasksChartInstance.data.datasets[0].backgroundColor = 'rgba(241, 196, 15, 0.2)';
                     tasksChartInstance.data.datasets[0].borderColor = 'rgba(241, 196, 15, 1)';
-                    tasksChartInstance.options.scales.y.title.text = '星星数量';
+                    tasksChartInstance.options.scales.y.title.text = '历史星星数';
                     tasksChartInstance.options.scales.y.beginAtZero = false; // 允许从负数开始
                     tasksChartInstance.options.plugins.tooltip.callbacks.label = function(context) {
-                        return `星星数量: ${context.raw}`;
+                        return `历史星星数: ${context.raw}`;
                     };
                     chartInfo.textContent = "点击图表上的数据点查看每日详情 - 星星数量可能为负数";
                 }
@@ -893,7 +893,7 @@
                     
                     const stars = document.createElement('p');
                     const starsValue = data.stars || 0;
-                    stars.innerHTML = `<strong>当日星星数:</strong> <span class="${starsValue < 0 ? 'negative-stars' : ''}">${starsValue}</span>`;
+                    stars.innerHTML = `<strong>历史星星数:</strong> <span class="${starsValue < 0 ? 'negative-stars' : ''}">${starsValue}</span>`;
                     dayDetails.appendChild(stars);
                     
                     // 尝试获取当天的任务列表
