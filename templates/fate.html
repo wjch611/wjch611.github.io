@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>命运斗争任务追踪器</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <style>
         :root {
             --primary-color: #3498db;
@@ -192,6 +193,26 @@
             color: white;
         }
         
+        .time-scale-toggle {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+        
+        .time-scale-btn {
+            padding: 8px 15px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-scale-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -307,6 +328,10 @@
                 flex-direction: column;
                 gap: 10px;
             }
+            
+            .time-scale-toggle {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
@@ -356,12 +381,17 @@
         <div class="chart-container">
             <h2>任务统计历史</h2>
             <div class="time-navigation">
-                <button id="prev-period">← 前一周</button>
+                <button id="prev-period">← 前一个</button>
                 <span id="chart-period">本周</span>
-                <button id="next-period">下一周 →</button>
+                <button id="next-period">下一个 →</button>
                 <div class="chart-type-toggle">
                     <button id="tasks-chart-btn" class="chart-type-btn active">任务完成</button>
                     <button id="stars-chart-btn" class="chart-type-btn">星星数量</button>
+                </div>
+                <div class="time-scale-toggle">
+                    <button id="week-scale-btn" class="time-scale-btn active">周视图</button>
+                    <button id="month-scale-btn" class="time-scale-btn">月视图</button>
+                    <button id="year-scale-btn" class="time-scale-btn">年视图</button>
                 </div>
             </div>
             <canvas id="tasks-chart"></canvas>
@@ -420,8 +450,9 @@
             let currentStars = 0;
             let todayTasks = [];
             let historyData = {};
-            let currentChartPeriod = 0; // 0表示当前周，负数表示过去，正数表示未来
+            let currentChartPeriod = 0; // 0表示当前周/月/年，负数表示过去，正数表示未来
             let currentChartType = 'tasks'; // 'tasks' 或 'stars'
+            let currentTimeScale = 'week'; // 'week', 'month', 'year'
             
             // DOM元素
             const starsCountEl = document.getElementById('stars-count');
@@ -439,6 +470,9 @@
             const nextPeriodBtn = document.getElementById('next-period');
             const tasksChartBtn = document.getElementById('tasks-chart-btn');
             const starsChartBtn = document.getElementById('stars-chart-btn');
+            const weekScaleBtn = document.getElementById('week-scale-btn');
+            const monthScaleBtn = document.getElementById('month-scale-btn');
+            const yearScaleBtn = document.getElementById('year-scale-btn');
             const dayDetailModal = document.getElementById('day-detail-modal');
             const modalDate = document.getElementById('modal-date');
             const dayDetails = document.getElementById('day-details');
@@ -510,6 +544,12 @@
                 return now.toISOString().split('T')[0];
             }
             
+            // 格式化日期显示
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+            }
+            
             // 更新日期和时间显示
             function updateDateTime() {
                 const now = new Date();
@@ -517,7 +557,7 @@
                 currentDateEl.textContent = now.toLocaleDateString('zh-CN', options);
             }
             
-            // 检查任务设置时间 - 7点前可设置，7点后不可设置
+            // 检查任务设置时间 - 25点前可设置，25点后不可设置
             function checkTaskSettingTime() {
                 const now = new Date();
                 const hours = now.getHours();
@@ -623,6 +663,7 @@
                 renderTasks();
                 updateTasksSummary();
                 saveData();
+                updateChart(); // 添加任务后刷新图表
             }
             
             // 切换任务完成状态
@@ -642,7 +683,7 @@
                 renderTasks();
                 updateTasksSummary();
                 saveData();
-                updateChart();
+                updateChart(); // 任务状态改变后刷新图表
             }
             
             // 检查每日结算
@@ -701,7 +742,7 @@
                 
                 renderStars();
                 saveData();
-                updateChart();
+                updateChart(); // 结算后刷新图表
             }
             
             // 初始化图表
@@ -772,27 +813,116 @@
                 updateChart();
             }
             
-            // 更新图表数据
+            // 获取指定时间范围内的日期范围
+            function getDateRange(timeScale, periodOffset) {
+                const today = new Date();
+                let startDate, endDate, labelFormat;
+                
+                switch(timeScale) {
+                    case 'week':
+                        // 周视图：显示7天
+                        startDate = new Date(today);
+                        startDate.setDate(today.getDate() - 6 + (periodOffset * 7));
+                        endDate = new Date(startDate);
+                        endDate.setDate(startDate.getDate() + 6);
+                        labelFormat = 'MMM dd'; // 例如: "9月 01"
+                        break;
+                        
+                    case 'month':
+                        // 月视图：显示30天
+                        startDate = new Date(today);
+                        startDate.setDate(today.getDate() - 29 + (periodOffset * 30));
+                        endDate = new Date(startDate);
+                        endDate.setDate(startDate.getDate() + 29);
+                        labelFormat = 'MMM dd';
+                        break;
+                        
+                    case 'year':
+                        // 年视图：显示12个月
+                        startDate = new Date(today.getFullYear() + periodOffset, 0, 1);
+                        endDate = new Date(today.getFullYear() + periodOffset, 11, 31);
+                        labelFormat = 'yyyy MMM'; // 例如: "2023 9月"
+                        break;
+                }
+                
+                return { startDate, endDate, labelFormat };
+            }
+            
+            // 更新图表数据 - 根据时间尺度优化
             function updateChart() {
-                // 获取最近两周的日期
+                const { startDate, endDate, labelFormat } = getDateRange(currentTimeScale, currentChartPeriod);
+                
                 const dates = [];
                 const tasksData = [];
                 const starsData = [];
                 
-                const today = new Date();
-                for (let i = 13 + currentChartPeriod * 7; i >= currentChartPeriod * 7; i--) {
-                    const date = new Date();
-                    date.setDate(today.getDate() - i);
-                    const dateString = date.toISOString().split('T')[0];
-                    
-                    dates.push(dateString);
-                    
-                    if (historyData[dateString]) {
-                        tasksData.push(historyData[dateString].completedTasks);
-                        starsData.push(historyData[dateString].stars || 0);
-                    } else {
-                        tasksData.push(null);
-                        starsData.push(null);
+                const todayString = getTodayDateString();
+                
+                if (currentTimeScale === 'year') {
+                    // 年视图：按月聚合数据
+                    for (let month = 0; month < 12; month++) {
+                        const monthStart = new Date(startDate.getFullYear(), month, 1);
+                        const monthEnd = new Date(startDate.getFullYear(), month + 1, 0);
+                        const monthKey = monthStart.toISOString().slice(0, 7); // YYYY-MM
+                        
+                        let monthTasks = 0;
+                        let monthStars = 0;
+                        let dayCount = 0;
+                        
+                        // 遍历该月的每一天
+                        const currentDay = new Date(monthStart);
+                        while (currentDay <= monthEnd) {
+                            const dateString = currentDay.toISOString().split('T')[0];
+                            
+                            // 如果是今天，使用实时数据
+                            if (dateString === todayString) {
+                                const completedCount = todayTasks.filter(task => task.completed).length;
+                                monthTasks += completedCount;
+                                monthStars += currentStars;
+                                dayCount++;
+                            } 
+                            // 如果是历史数据
+                            else if (historyData[dateString]) {
+                                monthTasks += historyData[dateString].completedTasks;
+                                monthStars += historyData[dateString].stars || 0;
+                                dayCount++;
+                            }
+                            
+                            currentDay.setDate(currentDay.getDate() + 1);
+                        }
+                        
+                        // 计算月平均值
+                        const avgTasks = dayCount > 0 ? Math.round(monthTasks / dayCount) : 0;
+                        const avgStars = dayCount > 0 ? Math.round(monthStars / dayCount) : 0;
+                        
+                        dates.push(monthKey);
+                        tasksData.push(avgTasks);
+                        starsData.push(avgStars);
+                    }
+                } else {
+                    // 周视图和月视图：按天显示
+                    const currentDay = new Date(startDate);
+                    while (currentDay <= endDate) {
+                        const dateString = currentDay.toISOString().split('T')[0];
+                        
+                        dates.push(dateString);
+                        
+                        // 如果是今天，使用实时数据
+                        if (dateString === todayString) {
+                            const completedCount = todayTasks.filter(task => task.completed).length;
+                            tasksData.push(Math.max(0, completedCount));
+                            starsData.push(currentStars);
+                        } 
+                        // 如果是历史数据
+                        else if (historyData[dateString]) {
+                            tasksData.push(historyData[dateString].completedTasks);
+                            starsData.push(historyData[dateString].stars || 0);
+                        } else {
+                            tasksData.push(null);
+                            starsData.push(null);
+                        }
+                        
+                        currentDay.setDate(currentDay.getDate() + 1);
                     }
                 }
                 
@@ -807,57 +937,106 @@
                     tasksChartInstance.options.plugins.tooltip.callbacks.label = function(context) {
                         return `完成任务: ${context.raw}`;
                     };
-                    chartInfo.textContent = "点击图表上的数据点查看每日详情 - 任务完成数量不能为负数";
+                    chartInfo.textContent = "点击图表上的数据点查看详情 - 任务完成数量不能为负数";
                 } else {
-                    tasksChartInstance.data.datasets[0].label = '历史星星数';
+                    tasksChartInstance.data.datasets[0].label = '星星数量';
                     tasksChartInstance.data.datasets[0].data = starsData;
                     tasksChartInstance.data.datasets[0].backgroundColor = 'rgba(241, 196, 15, 0.2)';
                     tasksChartInstance.data.datasets[0].borderColor = 'rgba(241, 196, 15, 1)';
-                    tasksChartInstance.options.scales.y.title.text = '历史星星数';
+                    tasksChartInstance.options.scales.y.title.text = '星星数量';
                     tasksChartInstance.options.scales.y.beginAtZero = false; // 允许从负数开始
                     tasksChartInstance.options.plugins.tooltip.callbacks.label = function(context) {
-                        return `历史星星数: ${context.raw}`;
+                        return `星星数量: ${context.raw}`;
                     };
-                    chartInfo.textContent = "点击图表上的数据点查看每日详情 - 星星数量可能为负数";
+                    chartInfo.textContent = "点击图表上的数据点查看详情 - 星星数量可能为负数";
                 }
                 
-                tasksChartInstance.data.labels = dates;
+                // 格式化日期标签
+                const formattedLabels = dates.map(dateStr => {
+                    if (currentTimeScale === 'year') {
+                        // 年视图使用月份作为标签
+                        const [year, month] = dateStr.split('-');
+                        const date = new Date(year, month - 1);
+                        return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short' });
+                    } else {
+                        // 周视图和月视图使用日期作为标签
+                        const date = new Date(dateStr);
+                        return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+                    }
+                });
+                
+                tasksChartInstance.data.labels = formattedLabels;
                 
                 // 确保y轴从合适的值开始
                 const allValues = currentChartType === 'tasks' ? tasksData : starsData;
-                const minValue = Math.min(...allValues.filter(val => val !== null));
-                const maxValue = Math.max(...allValues.filter(val => val !== null));
+                const filteredValues = allValues.filter(val => val !== null);
                 
-                // 设置合适的y轴范围
-                if (currentChartType === 'tasks') {
-                    // 任务完成数量：从0开始
-                    tasksChartInstance.options.scales.y.suggestedMin = 0;
-                    tasksChartInstance.options.scales.y.suggestedMax = Math.ceil(maxValue * 1.1);
-                } else {
-                    // 星星数量：允许负数
-                    if (minValue < 0) {
-                        tasksChartInstance.options.scales.y.suggestedMin = Math.floor(minValue * 1.1);
-                    } else {
+                if (filteredValues.length > 0) {
+                    const minValue = Math.min(...filteredValues);
+                    const maxValue = Math.max(...filteredValues);
+                    
+                    // 设置合适的y轴范围
+                    if (currentChartType === 'tasks') {
+                        // 任务完成数量：从0开始
                         tasksChartInstance.options.scales.y.suggestedMin = 0;
+                        tasksChartInstance.options.scales.y.suggestedMax = Math.ceil(maxValue * 1.1);
+                    } else {
+                        // 星星数量：允许负数
+                        if (minValue < 0) {
+                            tasksChartInstance.options.scales.y.suggestedMin = Math.floor(minValue * 1.1);
+                        } else {
+                            tasksChartInstance.options.scales.y.suggestedMin = 0;
+                        }
+                        tasksChartInstance.options.scales.y.suggestedMax = Math.ceil(maxValue * 1.1);
                     }
-                    tasksChartInstance.options.scales.y.suggestedMax = Math.ceil(maxValue * 1.1);
                 }
                 
                 tasksChartInstance.update();
                 
                 // 更新图表期间显示
-                if (currentChartPeriod === 0) {
-                    chartPeriod.textContent = "本周";
-                } else if (currentChartPeriod === -1) {
-                    chartPeriod.textContent = "上周";
-                } else if (currentChartPeriod < -1) {
-                    chartPeriod.textContent = `${Math.abs(currentChartPeriod)}周前`;
-                } else {
-                    chartPeriod.textContent = `未来第${currentChartPeriod}周`;
-                }
+                updateChartPeriodLabel();
                 
                 // 禁用未来的导航按钮
                 nextPeriodBtn.disabled = currentChartPeriod >= 0;
+            }
+            
+            // 更新图表期间标签
+            function updateChartPeriodLabel() {
+                let periodText = '';
+                
+                switch(currentTimeScale) {
+                    case 'week':
+                        if (currentChartPeriod === 0) {
+                            periodText = "本周";
+                        } else if (currentChartPeriod === -1) {
+                            periodText = "上周";
+                        } else if (currentChartPeriod < -1) {
+                            periodText = `${Math.abs(currentChartPeriod)}周前`;
+                        } else {
+                            periodText = `未来第${currentChartPeriod}周`;
+                        }
+                        break;
+                        
+                    case 'month':
+                        if (currentChartPeriod === 0) {
+                            periodText = "本月";
+                        } else if (currentChartPeriod === -1) {
+                            periodText = "上月";
+                        } else if (currentChartPeriod < -1) {
+                            periodText = `${Math.abs(currentChartPeriod)}月前`;
+                        } else {
+                            periodText = `未来第${currentChartPeriod}月`;
+                        }
+                        break;
+                        
+                    case 'year':
+                        const currentYear = new Date().getFullYear();
+                        const displayYear = currentYear + currentChartPeriod;
+                        periodText = `${displayYear}年`;
+                        break;
+                }
+                
+                chartPeriod.textContent = periodText;
             }
             
             // 切换图表类型
@@ -876,16 +1055,128 @@
                 updateChart();
             }
             
+            // 切换时间尺度
+            function toggleTimeScale(scale) {
+                currentTimeScale = scale;
+                currentChartPeriod = 0; // 重置到当前周期
+                
+                // 更新按钮状态
+                weekScaleBtn.classList.remove('active');
+                monthScaleBtn.classList.remove('active');
+                yearScaleBtn.classList.remove('active');
+                
+                document.getElementById(`${scale}-scale-btn`).classList.add('active');
+                
+                updateChart();
+            }
+            
             // 显示某天的详情
             function showDayDetails(dateString) {
-                const date = new Date(dateString);
-                const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-                modalDate.textContent = date.toLocaleDateString('zh-CN', options);
+                // 对于年视图，dateString是YYYY-MM格式，需要特殊处理
+                let displayDate, detailsDate;
+                
+                if (currentTimeScale === 'year') {
+                    // 年视图点击的是月份，显示该月第一天
+                    detailsDate = new Date(dateString + '-01');
+                    displayDate = detailsDate.toLocaleDateString('zh-CN', { 
+                        year: 'numeric', 
+                        month: 'long'
+                    });
+                } else {
+                    detailsDate = new Date(dateString);
+                    displayDate = detailsDate.toLocaleDateString('zh-CN', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric', 
+                        weekday: 'long' 
+                    });
+                }
+                
+                modalDate.textContent = displayDate;
                 
                 dayDetails.innerHTML = '';
                 
-                if (historyData[dateString]) {
-                    const data = historyData[dateString];
+                const todayString = getTodayDateString();
+                const detailsDateString = detailsDate.toISOString().split('T')[0];
+                
+                if (currentTimeScale === 'year') {
+                    // 年视图：显示整个月的汇总数据
+                    const monthStart = new Date(detailsDate.getFullYear(), detailsDate.getMonth(), 1);
+                    const monthEnd = new Date(detailsDate.getFullYear(), detailsDate.getMonth() + 1, 0);
+                    
+                    let totalTasks = 0;
+                    let completedTasks = 0;
+                    let dayCount = 0;
+                    let starsSum = 0;
+                    
+                    // 遍历该月的每一天
+                    const currentDay = new Date(monthStart);
+                    while (currentDay <= monthEnd) {
+                        const dayString = currentDay.toISOString().split('T')[0];
+                        
+                        // 如果是今天，使用实时数据
+                        if (dayString === todayString) {
+                            completedTasks += todayTasks.filter(task => task.completed).length;
+                            totalTasks += todayTasks.length;
+                            starsSum += currentStars;
+                            dayCount++;
+                        } 
+                        // 如果是历史数据
+                        else if (historyData[dayString]) {
+                            completedTasks += historyData[dayString].completedTasks;
+                            totalTasks += historyData[dayString].totalTasks;
+                            starsSum += historyData[dayString].stars || 0;
+                            dayCount++;
+                        }
+                        
+                        currentDay.setDate(currentDay.getDate() + 1);
+                    }
+                    
+                    // 计算月平均值
+                    const avgCompleted = dayCount > 0 ? Math.round(completedTasks / dayCount) : 0;
+                    const avgTotal = dayCount > 0 ? Math.round(totalTasks / dayCount) : 0;
+                    const avgStars = dayCount > 0 ? Math.round(starsSum / dayCount) : 0;
+                    
+                    const summary = document.createElement('p');
+                    summary.innerHTML = `<strong>平均每日完成任务:</strong> ${avgCompleted}/${avgTotal}`;
+                    dayDetails.appendChild(summary);
+                    
+                    const stars = document.createElement('p');
+                    stars.innerHTML = `<strong>平均每日星星数:</strong> <span class="${avgStars < 0 ? 'negative-stars' : ''}">${avgStars}</span>`;
+                    dayDetails.appendChild(stars);
+                    
+                    const days = document.createElement('p');
+                    days.innerHTML = `<strong>有记录的天数:</strong> ${dayCount}`;
+                    dayDetails.appendChild(days);
+                    
+                } else if (detailsDateString === todayString) {
+                    // 显示今天的详情
+                    const summary = document.createElement('p');
+                    const completedCount = todayTasks.filter(task => task.completed).length;
+                    summary.innerHTML = `<strong>完成任务:</strong> ${completedCount}/${todayTasks.length}`;
+                    dayDetails.appendChild(summary);
+                    
+                    const stars = document.createElement('p');
+                    stars.innerHTML = `<strong>当前星星数:</strong> <span class="${currentStars < 0 ? 'negative-stars' : ''}">${currentStars}</span>`;
+                    dayDetails.appendChild(stars);
+                    
+                    if (todayTasks.length > 0) {
+                        const tasksHeader = document.createElement('h3');
+                        tasksHeader.textContent = "任务列表:";
+                        dayDetails.appendChild(tasksHeader);
+                        
+                        const tasksList = document.createElement('ul');
+                        todayTasks.forEach(task => {
+                            const taskItem = document.createElement('li');
+                            taskItem.style.textDecoration = task.completed ? 'line-through' : 'none';
+                            taskItem.textContent = task.text;
+                            tasksList.appendChild(taskItem);
+                        });
+                        
+                        dayDetails.appendChild(tasksList);
+                    }
+                } else if (historyData[detailsDateString]) {
+                    const data = historyData[detailsDateString];
                     
                     const summary = document.createElement('p');
                     summary.innerHTML = `<strong>完成任务:</strong> ${data.completedTasks}/${data.totalTasks}`;
@@ -897,7 +1188,7 @@
                     dayDetails.appendChild(stars);
                     
                     // 尝试获取当天的任务列表
-                    const tasks = JSON.parse(localStorage.getItem(`tasks_${dateString}`) || '[]');
+                    const tasks = JSON.parse(localStorage.getItem(`tasks_${detailsDateString}`) || '[]');
                     
                     if (tasks.length > 0) {
                         const tasksHeader = document.createElement('h3');
@@ -995,6 +1286,10 @@
                 
                 tasksChartBtn.addEventListener('click', () => toggleChartType('tasks'));
                 starsChartBtn.addEventListener('click', () => toggleChartType('stars'));
+                
+                weekScaleBtn.addEventListener('click', () => toggleTimeScale('week'));
+                monthScaleBtn.addEventListener('click', () => toggleTimeScale('month'));
+                yearScaleBtn.addEventListener('click', () => toggleTimeScale('year'));
                 
                 document.querySelectorAll('.close-modal').forEach(closeBtn => {
                     closeBtn.addEventListener('click', function() {

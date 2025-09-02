@@ -4,7 +4,7 @@ date: 2025-09-02
 taxonomies:
   tags:
 
-    - 学习
+    - 终身学习
 ---
 
 
