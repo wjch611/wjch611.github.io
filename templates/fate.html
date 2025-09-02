@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>命运斗争任务追踪器</title>
+    <title>命运斗争任务追踪器 - 本地数据版</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <style>
@@ -14,6 +14,7 @@
             --dark-color: #2c3e50;
             --light-color: #ecf0f1;
             --star-color: #f1c40f;
+            --export-color: #9b59b6;
         }
         
         body {
@@ -96,7 +97,7 @@
             font-weight: bold;
         }
         
-        input[type="text"], input[type="date"], input[type="password"] {
+        input[type="text"], input[type="date"], input[type="password"], input[type="file"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -261,14 +262,19 @@
         }
         
         .reset-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
             background-color: var(--danger-color);
         }
         
         .reset-btn:hover {
             background-color: #c0392b;
+        }
+        
+        .export-btn {
+            background-color: var(--export-color);
+        }
+        
+        .export-btn:hover {
+            background-color: #8e44ad;
         }
         
         .modal-buttons {
@@ -314,6 +320,26 @@
             font-weight: bold;
         }
         
+        .data-management {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .data-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .last-backup {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
         @media (max-width: 768px) {
             .dashboard {
                 grid-template-columns: 1fr;
@@ -332,6 +358,10 @@
             .time-scale-toggle {
                 margin-left: 0;
             }
+            
+            .data-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -340,7 +370,11 @@
         <header>
             <h1>命运斗争任务追踪器</h1>
             <p class="subtitle">每日完成任务，积累星星，从命运手中夺回自己的人生！</p>
-            <button id="reset-data-btn" class="reset-btn">清空历史数据</button>
+            <div class="header-buttons">
+                <button id="export-data-btn" class="export-btn">导出数据</button>
+                <button id="import-data-btn" class="export-btn">导入数据</button>
+                <button id="reset-data-btn" class="reset-btn">清空历史数据</button>
+            </div>
         </header>
         
         <div class="dashboard">
@@ -358,6 +392,16 @@
                 <p id="tasks-summary">今日任务: 0 已设置, 0 已完成</p>
                 <p id="task-explanation">任务完成情况不能为负数，代表你实际完成的任务数量</p>
             </div>
+        </div>
+        
+        <div class="data-management">
+            <h2>数据管理</h2>
+            <p>定期导出数据到本地文件，防止浏览器数据丢失</p>
+            <div class="data-buttons">
+                <button id="backup-now-btn" class="export-btn">立即备份数据</button>
+                <button id="restore-data-btn" class="export-btn">从备份恢复</button>
+            </div>
+            <p class="last-backup" id="last-backup-info">上次备份: 从未备份</p>
         </div>
         
         <div class="task-form">
@@ -440,6 +484,22 @@
         </div>
     </div>
     
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>导入数据</h2>
+            <div class="form-group">
+                <label for="import-file">选择数据文件:</label>
+                <input type="file" id="import-file" accept=".json">
+                <p id="import-error" class="password-error" style="display: none;">文件格式错误，请选择有效的备份文件</p>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirm-import-btn" class="modal-btn modal-confirm">导入</button>
+                <button id="cancel-import-btn" class="modal-btn modal-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+    
     <div id="notification" class="notification">
         消息通知
     </div>
@@ -453,6 +513,7 @@
             let currentChartPeriod = 0; // 0表示当前周/月/年，负数表示过去，正数表示未来
             let currentChartType = 'tasks'; // 'tasks' 或 'stars'
             let currentTimeScale = 'week'; // 'week', 'month', 'year'
+            let lastBackupTime = null;
             
             // DOM元素
             const starsCountEl = document.getElementById('stars-count');
@@ -478,6 +539,11 @@
             const dayDetails = document.getElementById('day-details');
             const notification = document.getElementById('notification');
             const resetDataBtn = document.getElementById('reset-data-btn');
+            const exportDataBtn = document.getElementById('export-data-btn');
+            const importDataBtn = document.getElementById('import-data-btn');
+            const backupNowBtn = document.getElementById('backup-now-btn');
+            const restoreDataBtn = document.getElementById('restore-data-btn');
+            const lastBackupInfo = document.getElementById('last-backup-info');
             const passwordModal = document.getElementById('password-modal');
             const resetPasswordInput = document.getElementById('reset-password');
             const passwordError = document.getElementById('password-error');
@@ -486,6 +552,11 @@
             const resetConfirmModal = document.getElementById('reset-confirm-modal');
             const confirmResetBtn = document.getElementById('confirm-reset-btn');
             const cancelResetBtn = document.getElementById('cancel-reset-btn');
+            const importModal = document.getElementById('import-modal');
+            const importFileInput = document.getElementById('import-file');
+            const importError = document.getElementById('import-error');
+            const confirmImportBtn = document.getElementById('confirm-import-btn');
+            const cancelImportBtn = document.getElementById('cancel-import-btn');
             const chartInfo = document.getElementById('chart-info');
             
             // Chart.js实例
@@ -504,6 +575,9 @@
                 
                 // 检查是否需要每日结算
                 checkDailySettlement();
+                
+                // 检查是否需要提醒备份
+                checkBackupReminder();
             }
             
             // 从localStorage加载数据
@@ -526,6 +600,13 @@
                 if (savedHistory !== null) {
                     historyData = JSON.parse(savedHistory);
                 }
+                
+                // 加载备份时间
+                const savedBackupTime = localStorage.getItem('lastBackupTime');
+                if (savedBackupTime !== null) {
+                    lastBackupTime = new Date(savedBackupTime);
+                    updateLastBackupInfo();
+                }
             }
             
             // 保存数据到localStorage
@@ -536,6 +617,96 @@
                 localStorage.setItem(`tasks_${today}`, JSON.stringify(todayTasks));
                 
                 localStorage.setItem('tasksHistory', JSON.stringify(historyData));
+                
+                if (lastBackupTime) {
+                    localStorage.setItem('lastBackupTime', lastBackupTime.toISOString());
+                }
+            }
+            
+            // 导出数据到文件
+            function exportData() {
+                const dataToExport = {
+                    starsCount: currentStars,
+                    todayTasks: todayTasks,
+                    historyData: historyData,
+                    exportDate: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                const dataStr = JSON.stringify(dataToExport, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `命运斗争任务数据_${getTodayDateString()}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                // 更新备份时间
+                lastBackupTime = new Date();
+                localStorage.setItem('lastBackupTime', lastBackupTime.toISOString());
+                updateLastBackupInfo();
+                
+                showNotification('数据已成功导出！');
+            }
+            
+            // 从文件导入数据
+            function importData(file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        // 验证数据格式
+                        if (!importedData.starsCount && importedData.starsCount !== 0) {
+                            throw new Error('无效的数据格式');
+                        }
+                        
+                        // 确认是否覆盖现有数据
+                        if (confirm('导入数据将覆盖当前所有数据，是否继续？')) {
+                            currentStars = importedData.starsCount;
+                            todayTasks = importedData.todayTasks || [];
+                            historyData = importedData.historyData || {};
+                            
+                            // 保存导入的数据
+                            saveData();
+                            
+                            // 更新界面
+                            renderStars();
+                            renderTasks();
+                            updateTasksSummary();
+                            updateChart();
+                            
+                            showNotification('数据已成功导入！');
+                        }
+                    } catch (error) {
+                        importError.style.display = 'block';
+                        console.error('导入数据时出错:', error);
+                    }
+                };
+                
+                reader.readAsText(file);
+            }
+            
+            // 更新上次备份信息
+            function updateLastBackupInfo() {
+                if (lastBackupTime) {
+                    lastBackupInfo.textContent = `上次备份: ${lastBackupTime.toLocaleString('zh-CN')}`;
+                } else {
+                    lastBackupInfo.textContent = '上次备份: 从未备份';
+                }
+            }
+            
+            // 检查是否需要提醒备份
+            function checkBackupReminder() {
+                // 每7天提醒一次备份
+                if (!lastBackupTime || (new Date() - lastBackupTime) > 7 * 24 * 60 * 60 * 1000) {
+                    showNotification('建议定期导出数据备份，防止数据丢失！', 5000);
+                }
             }
             
             // 获取今日日期字符串 (YYYY-MM-DD)
@@ -946,7 +1117,7 @@
                     tasksChartInstance.options.scales.y.title.text = '星星数量';
                     tasksChartInstance.options.scales.y.beginAtZero = false; // 允许从负数开始
                     tasksChartInstance.options.plugins.tooltip.callbacks.label = function(context) {
-                        return `星星数量: ${context.raw}`;
+                                        return `星星数量: ${context.raw}`;
                     };
                     chartInfo.textContent = "点击图表上的数据点查看详情 - 星星数量可能为负数";
                 }
@@ -1215,13 +1386,13 @@
             }
             
             // 显示通知
-            function showNotification(message) {
+            function showNotification(message, duration = 3000) {
                 notification.textContent = message;
                 notification.style.display = 'block';
                 
                 setTimeout(() => {
                     notification.style.display = 'none';
-                }, 3000);
+                }, duration);
             }
             
             // 清空所有数据
@@ -1234,6 +1405,7 @@
                 todayTasks = [];
                 historyData = {};
                 currentChartPeriod = 0;
+                lastBackupTime = null;
                 
                 // 保存空数据
                 saveData();
@@ -1243,6 +1415,7 @@
                 renderTasks();
                 updateTasksSummary();
                 updateChart();
+                updateLastBackupInfo();
                 
                 // 显示成功消息
                 showNotification('所有数据已成功清空！');
@@ -1294,8 +1467,14 @@
                 document.querySelectorAll('.close-modal').forEach(closeBtn => {
                     closeBtn.addEventListener('click', function() {
                         this.closest('.modal').style.display = 'none';
-                    });
-                });
+                        // 重置密码输入框和错误信息
+                        resetPasswordInput.value = '';
+                        passwordError.style.display = 'none';
+                        // 重置导入文件输入框和错误信息
+                        importFileInput.value = '';
+                        importError.style.display = 'none';
+                    }
+                )});
                 
                 window.addEventListener('click', (e) => {
                     if (e.target.classList.contains('modal')) {
@@ -1303,12 +1482,45 @@
                         // 重置密码输入框和错误信息
                         resetPasswordInput.value = '';
                         passwordError.style.display = 'none';
+                        // 重置导入文件输入框和错误信息
+                        importFileInput.value = '';
+                        importError.style.display = 'none';
                     }
                 });
                 
                 // 清空数据按钮事件
                 resetDataBtn.addEventListener('click', () => {
                     passwordModal.style.display = 'flex';
+                });
+                
+                // 导出数据按钮事件
+                exportDataBtn.addEventListener('click', exportData);
+                backupNowBtn.addEventListener('click', exportData);
+                
+                // 导入数据按钮事件
+                importDataBtn.addEventListener('click', () => {
+                    importModal.style.display = 'flex';
+                });
+                
+                restoreDataBtn.addEventListener('click', () => {
+                    importModal.style.display = 'flex';
+                });
+                
+                // 确认导入按钮事件
+                confirmImportBtn.addEventListener('click', () => {
+                    if (importFileInput.files.length > 0) {
+                        importData(importFileInput.files[0]);
+                        importModal.style.display = 'none';
+                    } else {
+                        importError.textContent = '请选择要导入的文件';
+                        importError.style.display = 'block';
+                    }
+                });
+                
+                cancelImportBtn.addEventListener('click', () => {
+                    importModal.style.display = 'none';
+                    importFileInput.value = '';
+                    importError.style.display = 'none';
                 });
                 
                 // 密码验证按钮事件
@@ -1340,6 +1552,9 @@
                     updateDateTime();
                     checkTaskSettingTime();
                 }, 60000);
+                
+                // 每天检查一次备份提醒
+                setInterval(checkBackupReminder, 24 * 60 * 60 * 1000);
             }
             
             // 启动应用
