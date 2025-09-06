@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>炫酷CD音乐播放器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        /* 添加天气主题类 */
+        .theme-sunny {
+            --icon-color: #FF6B6B;
+            --text-color: #4A4A4A;
+            --progress-gradient: linear-gradient(90deg, #FF9A76, #FF6B6B);
+            --lyrics-active: #FF6B6B;
+            --playlist-active: rgba(255, 154, 118, 0.3);
+        }
+        
+        .theme-night {
+            --icon-color: #87CEEB;
+            --text-color: #4A4A4A;
+            --progress-gradient: linear-gradient(90deg, #6B7A8F, #4A648C);
+            --lyrics-active: #87CEEB;
+            --playlist-active: rgba(107, 122, 143, 0.3);
+        }
+        
+        .theme-rain {
+            --icon-color: #4B6584;
+            --text-color: #4A4A4A;
+            --progress-gradient: linear-gradient(90deg, #6C7A89, #4B6584);
+            --lyrics-active: #4B6584;
+            --playlist-active: rgba(108, 122, 137, 0.3);
+        }
+        
+        .theme-storm {
+            --icon-color: #2C3E50;
+            --text-color: #4A4A4A;
+            --progress-gradient: linear-gradient(90deg, #4A4A4A, #2C3E50);
+            --lyrics-active: #2C3E50;
+            --playlist-active: rgba(44, 62, 80, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #FF9A76;
+            --secondary: #FF6B6B;
+            --accent: #FFD166;
+            --light: #FFFCF9;
+            --dark: #4A4A4A;
+            --success: #4ECDC4;
+            --gray: #8A8A8A;
+            --sky: #87CEEB;
+            --ocean: #5AB9EA;
+            --sunset: #FF9A76;
+            --grass: #8ACB88;
+            
+            /* 默认使用晴天主题 */
+            --icon-color: #FF6B6B;
+            --text-color: #4A4A4A;
+            --progress-gradient: linear-gradient(90deg, #FF9A76, #FF6B6B);
+            --lyrics-active: #FF6B6B;
+            --playlist-active: rgba(255, 154, 118, 0.3);
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--sunset), var(--accent), var(--sky));
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            transition: color 0.5s ease; /* 添加颜色过渡效果 */
+        }
+        
+        .background-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            opacity: 0.7;
+            transition: opacity 1s ease;
+        }
+        
+        /* 天气效果覆盖层 */
+        .weather-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+            transition: all 0.8s ease;
+        }
+        
+        /* 天气效果类 */
+        .weather-sunny {
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.2), rgba(255, 150, 0, 0.3));
+        }
+        
+        .weather-night {
+            background: rgba(0, 0, 40, 0.7);
+        }
+        
+        .weather-rain {
+            background: rgba(0, 50, 100, 0.4);
+        }
+        
+        .weather-storm {
+            background: rgba(0, 0, 20, 0.8);
+        }
+        
+        /* 雨滴效果 */
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .drop {
+            position: absolute;
+            top: -20px;
+            width: 1px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.5);
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                top: calc(100% + 20px);
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: var(--icon-color);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            opacity: 0.8;
+            font-weight: 500;
+            transition: all 0.6s ease;
+        }
+        
+        /* 天气选择器 */
+        .weather-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            padding: 8px 15px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .weather-selector select {
+            background: transparent;
+            border: none;
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .weather-selector i {
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            font-size: 1.2rem;
+            transition: color 0.5s ease;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            width: 100%;
+            flex: 1;
+        }
+        
+        .player-container {
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .album-art-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+            perspective: 1000px;
+        }
+        
+        .album-art {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transition: transform 0.5s ease;
+            border: 10px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            transform-origin: center;
+        }
+        
+        .cd-pattern {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.1) 100%),
+                repeating-radial-gradient(circle at center, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
+            animation: rotatePattern 20s linear infinite;
+            animation-play-state: paused;
+        }
+        
+        .cd-shine {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 25%;
+            left: 25%;
+            filter: blur(5px);
+            opacity: 0.5;
+            transform-origin: center;
+            animation: rotateShine 20s linear infinite;
+            animation-play-state: paused;
+        }
+        
+        /* 修复CD旋转问题 */
+        .album-art.playing {
+            animation: rotateCD 20s linear infinite;
+            animation-play-state: running;
+        }
+        
+        .album-art.playing .cd-pattern,
+        .album-art.playing .cd-shine {
+            animation-play-state: running;
+        }
+        
+        @keyframes rotateCD {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotatePattern {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotateShine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .album-art-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            border: 5px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        
+        .album-art-center::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 15px;
+            height: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+        }
+        
+        .song-info {
+            text-align: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        .song-title {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            transition: color 0.5s ease;
+        }
+        
+        .song-artist {
+            font-size: 1.2rem;
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            opacity: 0.8;
+            font-weight: 500;
+            transition: color 0.5s ease;
+        }
+        
+        /* 歌词容器 */
+        .lyrics-container {
+            width: 100%;
+            height: 100px;
+            overflow-y: auto;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .lyrics-line {
+            padding: 5px 0;
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .lyrics-line.active {
+            color: var(--lyrics-active); /* 使用天气主题激活歌词颜色 */
+            opacity: 1;
+            font-weight: 600;
+            transform: scale(1.05);
+        }
+        
+        /* 隐藏歌词滚动条 */
+        .lyrics-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .lyrics-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .progress-container {
+            background: rgba(255, 255, 255, 0.6);
+            height: 8px;
+            border-radius: 10px;
+            margin: 20px 0;
+            cursor: pointer;
+            position: relative;
+            width: 100%;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .progress {
+            background: var(--progress-gradient); /* 使用天气主题进度条渐变 */
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+            position: relative;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+        
+        .progress::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            opacity: 0.8;
+            width: 100%;
+            transition: color 0.5s ease;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .control-btn {
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-btn:hover {
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .play-btn {
+            background: var(--icon-color); /* 使用天气主题图标颜色 */
+            color: white;
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+        
+        .play-btn:hover {
+            background: var(--primary);
+            box-shadow: 0 10px 25px rgba(255, 154, 118, 0.5);
+        }
+        
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+            padding: 0 20px;
+        }
+        
+        .volume-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--icon-color); /* 使用天气主题图标颜色 */
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            transition: background 0.5s ease;
+        }
+        
+        .playlist-container {
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            height: calc(100vh - 200px); 
+            display: flex; 
+            flex-direction: column;
+        }
+        
+        .playlist-content {
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+        }
+        
+        .playlist-header {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 107, 107, 0.2);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.5s ease;
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            outline: none;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: color 0.5s ease;
+        }
+        
+        .search-input::placeholder {
+            color: var(--gray);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            transition: color 0.5s ease;
+        }
+        
+        .playlist {
+            list-style: none;
+            overflow-y: auto; 
+            flex: 1; 
+            max-height: 100%; 
+        }
+        
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .playlist-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .playlist-item.active {
+            background: var(--playlist-active); /* 使用天气主题激活列表项背景 */
+            border-left: 4px solid var(--icon-color); /* 使用天气主题图标颜色 */
+        }
+        
+        .playlist-item-info {
+            flex: 1;
+            min-width: 0;
+            margin-left: 15px;
+        }
+        
+        .playlist-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.5s ease;
+        }
+        
+        .playlist-item-artist {
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.5s ease;
+        }
+        
+        .playlist-item-duration {
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            font-size: 0.9rem;
+            padding-left: 10px;
+            transition: color 0.5s ease;
+        }
+        
+        .music-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .music-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .music-icon i {
+            position: relative;
+            z-index: 1;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            font-size: 0.9rem;
+            width: 100%;
+            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: color 0.5s ease;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .playlist-container {
+                height: 400px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .album-art-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .lyrics-container {
+                height: 80px;
+                font-size: 1rem;
+            }
+            
+            .controls {
+                gap: 15px;
+            }
+            
+            .control-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            
+            .play-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .weather-selector {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .album-art-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .song-title {
+                font-size: 1.5rem;
+            }
+            
+            .song-artist {
+                font-size: 1rem;
+            }
+        }
+        
+        /* 加载状态 */
+        .loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            font-weight: 600;
+            transition: color 0.5s ease;
+        }
+        
+        .loading-indicator i {
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 闪电效果 */
+        @keyframes lightning {
+            0% { opacity: 0; }
+            2% { opacity: 1; }
+            4% { opacity: 0; }
+            45% { opacity: 0; }
+            50% { opacity: 1; }
+            52% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+        
+        .lightning {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            animation: lightning 7s infinite;
+            pointer-events: none;
+        }
+        
+        /* 自定义滚动条 */
+        .playlist::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .playlist::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        .playlist::-webkit-scrollbar-thumb {
+            background: var(--icon-color); /* 使用天气主题图标颜色 */
+            border-radius: 4px;
+            transition: background 0.5s ease;
+        }
+        
+        .playlist::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* 按钮激活状态 */
+        .control-btn.active-mode {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            box-shadow: 0 0 0 2px var(--icon-color); /* 使用天气主题图标颜色 */
+        }
+        
+        .mode-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-color); /* 使用天气主题文本颜色 */
+            opacity: 0.8;
+            height: 20px;
+            transition: color 0.5s ease;
+        }
+
+        /* 导出按钮样式 */
+        .export-btn {
+            background: transparent;
+            border: none;
+            color: var(--icon-color); /* 使用天气主题图标颜色 */
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .export-all-btn {
+            background: var(--icon-color); /* 使用天气主题图标颜色 */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .export-all-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景图层 -->
+    <div class="background-layer" id="backgroundLayer"></div>
+    
+    <!-- 天气覆盖层 -->
+    <div class="weather-overlay" id="weatherOverlay"></div>
+    
+    <!-- 雨滴效果 -->
+    <div class="rain" id="rainEffect"></div>
+    
+    <!-- 闪电效果 -->
+    <div class="lightning" id="lightningEffect"></div>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-music"></i> </h1>
+            <p class="subtitle">嘘...，你听清内心的声音了吗？</p>
+            
+            <!-- 天气选择器 -->
+            <div class="weather-selector">
+                <i class="fas fa-cloud-sun"></i>
+                <select id="weatherSelect">
+                    <option value="sunny">晴天</option>
+                    <option value="night">夜晚</option>
+                    <option value="rain">小雨</option>
+                    <option value="storm">暴风雨</option>
+                </select>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="player-container">
+                <div class="album-art-container">
+                    <div class="album-art" id="albumArt">
+                        <div class="cd-pattern"></div>
+                        <div class="cd-shine"></div>
+                    </div>
+                    <div class="album-art-center"></div>
+                </div>
+                
+                <div class="song-info">
+                    <h2 class="song-title" id="songTitle">加载中...</h2>
+                    <p class="song-artist" id="songArtist">请稍候</p>
+                </div>
+                
+                <!-- 歌词容器 -->
+                <div class="lyrics-container" id="lyricsContainer">
+                    <div class="lyrics-line active">加载歌词中...</div>
+                </div>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="time-info">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+                
+                <div class="controls">
+                    <button class="control-btn" id="shuffleBtn" title="随机播放">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="control-btn" id="prevBtn" title="上一首">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="control-btn play-btn" id="playBtn" title="播放">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn" id="nextBtn" title="下一首">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="control-btn" id="sequentialBtn" title="顺序播放">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button class="control-btn" id="repeatBtn" title="单曲循环">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+                
+                <div class="mode-info" id="modeInfo">
+                    当前模式: 顺序播放
+                </div>
+                
+                <div class="volume-container">
+                    <button class="control-btn" id="volumeBtn" title="静音">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.7">
+                </div>
+            </div>
+            
+            <div class="playlist-container">
+                <div class="playlist-content">
+                    <h3 class="playlist-header">
+                        <span><i class="fas fa-list-ol"></i> 播放列表</span>
+                        <span id="songCount">(0首)</span>
+                    </h3>
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="搜索歌曲或歌手..." class="search-input">
+                    </div>
+                    <ul class="playlist" id="playlist">
+                        <li class="loading-indicator">
+                            <i class="fas fa-spinner"></i> 正在加载音乐列表...
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>使用HTML5 Audio API | 沉浸式音乐体验 | 炫酷CD效果</p>
+        </footer>
+    </div>
+
+    <script>
+        // 音乐目录
+        const MUSIC_DIR = "/musics/";
+        // 歌词目录
+        const LYRIC_DIR = "/lyrics/";
+
+        // 背景图片数组 (增加到30张)
+        const backgroundImages = [
+            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'
+        ];
+        
+        // DOM元素
+        const audio = new Audio();
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const sequentialBtn = document.getElementById('sequentialBtn');
+        const repeatBtn = document.getElementById('repeatBtn');
+        const volumeBtn = document.getElementById('volumeBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const progress = document.getElementById('progress');
+        const progressContainer = document.getElementById('progressContainer');
+        const songTitle = document.getElementById('songTitle');
+        const songArtist = document.getElementById('songArtist');
+        const albumArt = document.getElementById('albumArt');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const playlistEl = document.getElementById('playlist');
+        const searchInput = document.getElementById('searchInput');
+        const backgroundLayer = document.getElementById('backgroundLayer');
+        const weatherOverlay = document.getElementById('weatherOverlay');
+        const weatherSelect = document.getElementById('weatherSelect');
+        const rainEffect = document.getElementById('rainEffect');
+        const lightningEffect = document.getElementById('lightningEffect');
+        const songCount = document.getElementById('songCount');
+        const subtitleEl = document.querySelector('.subtitle');
+        const modeInfo = document.getElementById('modeInfo');
+        const lyricsContainer = document.getElementById('lyricsContainer');
+
+        // 状态变量
+        let musicData = [];
+        let isPlaying = false;
+        let currentSongIndex = 0;
+        let playMode = 'sequential'; // 'sequential', 'shuffle', 'repeat'
+        let lastVolume = audio.volume;
+        let currentBgIndex = 0;
+        let bgInterval;
+        let currentWeather = 'sunny';
+        let lyrics = []; // 存储当前歌曲的歌词数组
+        let currentLyricIndex = -1; // 当前显示的歌词索引
+
+        // 语录数组
+        const quotes = [
+            "嘘...，你听清内心的声音了吗？",
+            "音乐是穿越灵魂的语言。",
+            "在静谧中，旋律开始说话。",
+            "让音符把孤独变成温柔的光。",
+            "有些故事，只能用歌声诉说。",
+            "闭上眼，世界只剩下节拍。",
+            "每一首歌，都是一段未完的旅行。",
+            "把烦恼寄给风，让旋律替你疗愈。",
+            "你在听的，不只是声音，还有回忆。",
+            "当夜深人静，音乐替你守夜。",
+            "在音乐里，失落也能找到方向。",
+            "旋律像秘密，悄悄贴近心房。",
+            "用心听，连寂寞都有了颜色。",
+            "一段和弦，足以点亮整颗星空。",
+            "把时间交给音乐，它会还你温柔。",
+            "听见心跳，就是最简单的节拍。",
+            "歌声里藏着未说出口的勇气。",
+            "让旋律带你回到那一刻的温度。",
+            "每次停顿，都是下一句的开始。",
+            "即便世界混乱，音符也会替你整理情绪。",
+            "在歌里，找到那个还没放弃的自己。",
+            "风声加上和弦，便是短暂的永恒。",
+            "让声音带路，你会遇见另一个自己。",
+            "夜里最亮的，不是星，而是心里的那首歌。"
+        ];
+        let lastQuoteIndex = -1;
+        function updateSubtitleRandom() {
+            if (!subtitleEl) return;
+            let idx = Math.floor(Math.random() * quotes.length);
+            // 避免连续相同
+            if (quotes.length > 1) {
+                let attempts = 0;
+                while (idx === lastQuoteIndex && attempts < 8) {
+                    idx = Math.floor(Math.random() * quotes.length);
+                    attempts++;
+                }
+            }
+            lastQuoteIndex = idx;
+            // 渐隐切换效果
+            subtitleEl.style.opacity = '0';
+            setTimeout(() => {
+                subtitleEl.textContent = quotes[idx];
+                subtitleEl.style.opacity = '0.95';
+            }, 300);
+        }
+
+        // 初始化播放器
+        async function initPlayer() {
+            // 设置初始音量
+            audio.volume = volumeSlider.value;
+            
+            // 设置初始背景
+            setBackground(currentBgIndex);
+            
+            // 设置初始天气
+            setWeather(currentWeather);
+            
+            // 开始自动切换背景
+            startBackgroundRotation();
+            
+            // 加载音乐文件
+            await loadMusicFiles();
+            
+            // 加载第一首歌曲
+            if (musicData.length > 0) {
+                loadSong(currentSongIndex);
+            }
+            
+            // 更新模式按钮状态
+            updateModeButtons();
+            
+            // 事件监听器
+            playBtn.addEventListener('click', togglePlay);
+            prevBtn.addEventListener('click', prevSong);
+            nextBtn.addEventListener('click', nextSong);
+            shuffleBtn.addEventListener('click', () => setPlayMode('shuffle'));
+            sequentialBtn.addEventListener('click', () => setPlayMode('sequential'));
+            repeatBtn.addEventListener('click', () => setPlayMode('repeat'));
+            volumeBtn.addEventListener('click', toggleMute);
+            volumeSlider.addEventListener('input', setVolume);
+            progressContainer.addEventListener('click', setProgress);
+            searchInput.addEventListener('input', filterPlaylist);
+            weatherSelect.addEventListener('change', changeWeather);
+            
+            // 音频事件监听
+            audio.addEventListener('timeupdate', updateProgress);
+            audio.addEventListener('ended', handleEnded);
+            audio.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audio.duration);
+            });
+
+            // 初始化并每1分钟更换一次语录
+            updateSubtitleRandom();
+            setInterval(updateSubtitleRandom, 60 * 1000);
+        }
+
+        // 从指定目录加载音乐文件
+        async function loadMusicFiles() {
+            try {
+                // 模拟从目录加载音乐文件
+                const files = [
+                    "小红花-赵英俊.mp3",
+                    "The fear in my heart-朴树.mp3",
+                    "Vincent-Don McLean.mp3",
+                    "白鸽-伍佰 & China Blue.mp3",
+                    "船长-赵雷.mp3",
+                    "吉姆餐厅-赵雷.mp3",
+                    "恋恋风尘-老狼.mp3",
+                    "猎户星座-朴树.mp3",
+                    "梦中的哈德森-赵雷.mp3",
+                    "七月上-Jam.mp3",
+                    "星尘-周昭妍.mp3",
+                    "一万次悲伤-逃跑计划.mp3",
+                    "最美的期待-南征北战.mp3",
+                    "Kiss the rain-未知.mp3",
+                    "Somewhere-July.mp3",
+                    "曾经的你-许巍.mp3",
+                    "光年之外-G.E.M. 邓紫棋.mp3",
+                    "后会无期-G.E.M. 邓紫棋.mp3",
+                    "活着-郝云.mp3",
+                    "卡农-文武贝.mp3",
+                    "空帆船-朴树.mp3",
+                    "理想-赵雷.mp3",
+                    "旅行-许巍.mp3",
+                    "生活不止眼前的苟且-许巍.mp3",
+                    "唯一-G.E.M.邓紫棋.mp3",
+                    "执着-许巍.mp3",
+                    "Dehors-JORDANN.mp3",
+                    "小幸运-田馥甄.mp3",
+                    "妈妈的话-Zyboy忠宇.mp3"
+                ];
+                
+                // 创建音乐数据
+                musicData = files.map((file, index) => {
+                    const baseName = file.replace(/\.\w+$/, '');
+                    const parts = baseName.split('-');
+                    const title = parts[0].trim();
+                    const artist = parts.length > 1 ? parts.slice(1).join('-').trim() : '未知';
+                    
+                    const randomImageIndex = Math.floor(Math.random() * backgroundImages.length);
+                    const cover = backgroundImages[randomImageIndex];
+                    
+                    return {
+                        id: index + 1,
+                        title: title,
+                        artist: artist,
+                        file: MUSIC_DIR + file,
+                        cover: cover,
+                        duration: "3:45"
+                    };
+                });
+                
+                // 渲染播放列表
+                renderPlaylist();
+                
+            } catch (error) {
+                console.error('加载音乐文件失败:', error);
+                playlistEl.innerHTML = '<div class="playlist-error">加载音乐失败，请稍后再试</div>';
+            }
+        }
+
+        // 渲染播放列表
+        function renderPlaylist() {
+            playlistEl.innerHTML = '';
+            
+            musicData.forEach((song, index) => {
+                const li = document.createElement('li');
+                li.className = `playlist-item ${index === currentSongIndex ? 'active' : ''}`;
+                li.dataset.index = index;
+                
+                const randomImageIndex = Math.floor(Math.random() * backgroundImages.length);
+                const randomImage = backgroundImages[randomImageIndex];
+                
+                li.innerHTML = `
+                    <div class="music-icon" style="background-image: url('${randomImage}')">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="playlist-item-info">
+                        <div class="playlist-item-title">${song.title}</div>
+                        <div class="playlist-item-artist">${song.artist}</div>
+                    </div>
+                    <div class="playlist-item-duration">${song.duration}</div>
+                    <button class="export-btn" data-index="${index}" title="导出MP3和歌词"><i class="fas fa-download"></i></button>
+                `;
+                
+                li.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('export-btn')) return;
+                    currentSongIndex = index;
+                    loadSong(currentSongIndex);
+                    playSong();
+                    updatePlaylistHighlight();
+                });
+                
+                playlistEl.appendChild(li);
+            });
+            
+            // 更新歌曲计数
+            songCount.textContent = `(${musicData.length}首)`;
+
+            // 添加导出事件
+            document.querySelectorAll('.export-btn').forEach(btn => {
+                btn.addEventListener('click', () => exportSong(parseInt(btn.dataset.index)));
+            });
+        }
+
+        // 设置背景
+        function setBackground(index) {
+            currentBgIndex = index;
+            const bgUrl = backgroundImages[index];
+            backgroundLayer.style.backgroundImage = `url('${bgUrl}')`;
+        }
+        
+        // 下一张背景
+        function nextBackground() {
+            currentBgIndex++;
+            if (currentBgIndex >= backgroundImages.length) {
+                currentBgIndex = 0;
+            }
+            setBackground(currentBgIndex);
+        }
+        
+        // 开始自动背景轮换
+        function startBackgroundRotation() {
+            bgInterval = setInterval(() => {
+                nextBackground();
+            }, 60000);
+        }
+        
+        // 设置天气效果
+        function setWeather(weatherType) {
+            // 移除所有天气类
+            weatherOverlay.className = 'weather-overlay';
+            
+            // 添加当前天气类
+            weatherOverlay.classList.add(`weather-${weatherType}`);
+            currentWeather = weatherType;
+            
+            // 处理特殊天气效果
+            rainEffect.innerHTML = '';
+            lightningEffect.style.animation = 'none';
+            
+            if (weatherType === 'rain') {
+                createRaindrops();
+            } else if (weatherType === 'storm') {
+                createRaindrops();
+                lightningEffect.style.animation = 'lightning 7s infinite';
+            }
+
+            // 更新歌词容器背景根据天气
+            let lyricsBg;
+            switch (weatherType) {
+                case 'sunny':
+                    lyricsBg = 'linear-gradient(135deg, rgba(255, 200, 0, 0.1), rgba(255, 150, 0, 0.15))';
+                    break;
+                case 'night':
+                    lyricsBg = 'rgba(0, 0, 40, 0.35)';
+                    break;
+                case 'rain':
+                    lyricsBg = 'rgba(0, 50, 100, 0.2)';
+                    break;
+                case 'storm':
+                    lyricsBg = 'rgba(0, 0, 20, 0.4)';
+                    break;
+                default:
+                    lyricsBg = 'rgba(255, 255, 255, 0.3)';
+            }
+            lyricsContainer.style.background = lyricsBg;
+            
+            // 设置天气主题类
+            document.body.className = '';
+            document.body.classList.add(`theme-${weatherType}`);
+        }
+        
+        // 创建雨滴效果
+        function createRaindrops() {
+            const raindropCount = currentWeather === 'storm' ? 120 : 60;
+            
+            for (let i = 0; i < raindropCount; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'drop';
+                drop.style.left = `${Math.random() * 100}%`;
+                drop.style.animationDuration = `${0.5 + Math.random() * 0.5}s`;
+                drop.style.animationDelay = `${Math.random() * 5}s`;
+                rainEffect.appendChild(drop);
+            }
+        }
+        
+        // 切换天气
+        function changeWeather() {
+            setWeather(weatherSelect.value);
+        }
+        
+        // 设置播放模式
+        function setPlayMode(mode) {
+            playMode = mode;
+            updateModeButtons();
+            
+            // 更新模式信息
+            const modeNames = {
+                sequential: '顺序播放',
+                shuffle: '随机播放',
+                repeat: '单曲循环'
+            };
+            modeInfo.textContent = `当前模式: ${modeNames[mode]}`;
+        }
+        
+        // 更新模式按钮状态
+        function updateModeButtons() {
+            // 移除所有按钮的激活状态
+            shuffleBtn.classList.remove('active-mode');
+            sequentialBtn.classList.remove('active-mode');
+            repeatBtn.classList.remove('active-mode');
+            
+            // 为当前模式添加激活状态
+            if (playMode === 'shuffle') {
+                shuffleBtn.classList.add('active-mode');
+            } else if (playMode === 'sequential') {
+                sequentialBtn.classList.add('active-mode');
+            } else if (playMode === 'repeat') {
+                repeatBtn.classList.add('active-mode');
+            }
+        }
+        
+        // 加载歌曲
+        function loadSong(index) {
+            if (index < 0 || index >= musicData.length) return;
+            
+            const song = musicData[index];
+            audio.src = song.file;
+            songTitle.textContent = song.title;
+            songArtist.textContent = song.artist;
+            durationEl.textContent = song.duration;
+            
+            albumArt.style.backgroundImage = `url('${song.cover}')`;
+            
+            updatePlaylistHighlight();
+            
+            if (isPlaying) {
+                albumArt.classList.add('playing');
+            } else {
+                albumArt.classList.remove('playing');
+            }
+            
+            // 重置歌词状态
+            lyrics = [];
+            currentLyricIndex = -1;
+            lyricsContainer.innerHTML = '<div class="lyrics-line active">加载歌词中...</div>';
+            
+            // 加载歌词文件
+            loadLyrics(song.title);
+        }
+        
+        // 解析LRC歌词
+        function parseLrc(text) {
+            const lines = text.split('\n');
+            const result = [];
+            const timeRegex = /\[(\d{2}):(\d{2})\.(\d{2})\]/;
+
+            lines.forEach(line => {
+                const match = timeRegex.exec(line);
+                if (match) {
+                    const minutes = parseInt(match[1]);
+                    const seconds = parseInt(match[2]);
+                    const milliseconds = parseInt(match[3]) / 100;
+                    const time = minutes * 60 + seconds + milliseconds;
+                    const text = line.replace(timeRegex, '').trim();
+                    if (text) {
+                        result.push({ time, text });
+                    }
+                }
+            });
+
+            return result;
+        }
+        
+        // 加载歌词
+        function loadLyrics(songTitle) {
+            // 构造歌词文件路径
+            const lyricPath = `${LYRIC_DIR}${songTitle}.lrc`;
+            
+            fetch(lyricPath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('歌词文件未找到');
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    lyrics = parseLrc(text);
+                    // 初始化歌词显示
+                    renderLyrics();
+                })
+                .catch(error => {
+                    console.error('加载歌词失败:', error);
+                    lyrics = [];
+                    lyricsContainer.innerHTML = '<div class="lyrics-line active">暂无歌词</div>';
+                });
+        }
+
+        // 渲染所有歌词
+        function renderLyrics() {
+            if (lyrics.length === 0) {
+                lyricsContainer.innerHTML = '<div class="lyrics-line active">暂无歌词</div>';
+                return;
+            }
+
+            lyricsContainer.innerHTML = '';
+
+            lyrics.forEach(lyric => {
+                const lyricLine = document.createElement('div');
+                lyricLine.className = 'lyrics-line';
+                lyricLine.textContent = lyric.text || '♪';
+                lyricsContainer.appendChild(lyricLine);
+            });
+        }
+        
+        // 更新歌词显示
+        function highlightCurrentLyric() {
+            const lines = lyricsContainer.querySelectorAll('.lyrics-line');
+            lines.forEach((line, i) => {
+                if (i === currentLyricIndex) {
+                    line.classList.add('active');
+                    line.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    line.classList.remove('active');
+                }
+            });
+        }
+        
+        // 更新当前歌词
+        function updateLyrics() {
+            if (lyrics.length === 0 || isNaN(audio.currentTime)) return;
+            
+            const currentTime = audio.currentTime;
+            
+            // 查找当前时间对应的歌词索引
+            let newIndex = -1;
+            for (let i = 0; i < lyrics.length; i++) {
+                if (currentTime >= lyrics[i].time) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+            
+            // 如果没有找到，或者索引没有变化，则返回
+            if (newIndex === -1 || newIndex === currentLyricIndex) return;
+            
+            currentLyricIndex = newIndex;
+            highlightCurrentLyric();
+        }
+
+        // 播放歌曲
+        function playSong() {
+            if (musicData.length === 0) return;
+            
+            isPlaying = true;
+            audio.play().catch(error => {
+                console.error('播放失败:', error);
+            });
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            playBtn.title = "暂停";
+            albumArt.classList.add('playing');
+        }
+
+        // 暂停歌曲
+        function pauseSong() {
+            isPlaying = false;
+            audio.pause();
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playBtn.title = "播放";
+            albumArt.classList.remove('playing');
+        }
+
+        // 切换播放状态
+        function togglePlay() {
+            if (musicData.length === 0) return;
+            
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        }
+
+        // 上一首
+        function prevSong() {
+            if (musicData.length === 0) return;
+            
+            currentSongIndex--;
+            if (currentSongIndex < 0) {
+                currentSongIndex = musicData.length - 1;
+            }
+            loadSong(currentSongIndex);
+            playSong();
+        }
+
+        // 下一首
+        function nextSong() {
+            if (musicData.length === 0) return;
+            
+            if (playMode === 'shuffle') {
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * musicData.length);
+                } while (newIndex === currentSongIndex && musicData.length > 1);
+                
+                currentSongIndex = newIndex;
+            } else if (playMode === 'sequential') {
+                currentSongIndex++;
+                if (currentSongIndex >= musicData.length) {
+                    currentSongIndex = 0;
+                }
+            }
+            
+            // 在单曲循环模式下，nextSong() 仍然会切换到下一首
+            if (playMode !== 'repeat') {
+                loadSong(currentSongIndex);
+                playSong();
+            }
+        }
+        
+        // 处理歌曲结束
+        function handleEnded() {
+            if (playMode === 'repeat') {
+                // 单曲循环模式下，重新播放当前歌曲
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                nextSong();
+            }
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const { currentTime, duration } = audio;
+            const progressPercent = (currentTime / duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            currentTimeEl.textContent = formatTime(currentTime);
+            
+            // 更新歌词显示
+            updateLyrics();
+        }
+
+        // 设置进度
+        function setProgress(e) {
+            if (musicData.length === 0) return;
+            
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            
+            audio.currentTime = (clickX / width) * duration;
+        }
+
+        // 更新播放列表高亮
+        function updatePlaylistHighlight() {
+            document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                if (index === currentSongIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // 过滤播放列表
+        function filterPlaylist() {
+            const term = searchInput.value.toLowerCase();
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                const title = item.querySelector('.playlist-item-title').textContent.toLowerCase();
+                const artist = item.querySelector('.playlist-item-artist').textContent.toLowerCase();
+                if (title.includes(term) || artist.includes(term)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // 切换静音
+        function toggleMute() {
+            if (audio.volume > 0) {
+                lastVolume = audio.volume;
+                audio.volume = 0;
+                volumeSlider.value = 0;
+                volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                audio.volume = lastVolume;
+                volumeSlider.value = lastVolume;
+                volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        }
+
+        // 设置音量
+        function setVolume() {
+            audio.volume = volumeSlider.value;
+            if (audio.volume > 0) {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        }
+
+        // 格式化时间 (秒 -> MM:SS)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // 下载文件辅助函数
+        async function downloadFile(url, filename) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+                const blob = await response.blob();
+                return { filename, blob };
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
+        // 导出指定歌曲
+        async function exportSong(index) {
+            const song = musicData[index];
+            if (!song) return;
+
+            const mp3Url = song.file;
+            const lrcUrl = `${LYRIC_DIR}${song.title}.lrc`;
+
+            const zip = new JSZip();
+
+            const mp3 = await downloadFile(mp3Url, `${song.title}.mp3`);
+            const lrc = await downloadFile(lrcUrl, `${song.title}.lrc`);
+
+            if (mp3) zip.file(mp3.filename, mp3.blob);
+            if (lrc) zip.file(lrc.filename, lrc.blob);
+
+            const content = await zip.generateAsync({ type: "blob" });
+            saveAs(content, `${song.title}_export.zip`);
+        }
+
+        // 一键导出所有
+        async function exportAll() {
+            const zip = new JSZip();
+
+            for (let song of musicData) {
+                const mp3Url = song.file;
+                const lrcUrl = `${LYRIC_DIR}${song.title}.lrc`;
+
+                const mp3 = await downloadFile(mp3Url, `${song.title}.mp3`);
+                const lrc = await downloadFile(lrcUrl, `${song.title}.lrc`);
+
+                if (mp3) zip.file(mp3.filename, mp3.blob);
+                if (lrc) zip.file(lrc.filename, lrc.blob);
+            }
+
+            const content = await zip.generateAsync({ type: "blob" });
+            saveAs(content, "all_songs_export.zip");
+        }
+
+        // 初始化播放器
+        window.addEventListener('DOMContentLoaded', () => {
+            initPlayer();
+
+            // 添加一键导出所有按钮
+            const exportAllBtn = document.createElement('button');
+            exportAllBtn.className = 'export-all-btn';
+            exportAllBtn.innerHTML = '<i class="fas fa-download"></i> 导出所有';
+            exportAllBtn.title = '一键导出所有MP3和歌词';
+            exportAllBtn.addEventListener('click', exportAll);
+            document.querySelector('.playlist-header').appendChild(exportAllBtn);
+        });
+    </script>
+</body>
+</html>
