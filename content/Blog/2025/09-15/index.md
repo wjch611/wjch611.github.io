@@ -109,3 +109,7 @@ taxonomies:
 ───
 ```
 
+[Pure Belief and the Childlike Self](https://www.youtube.com/watch?v=N6o3yqqnk78)
+
+[Stop playing victim.](https://www.youtube.com/watch?v=RqfrUq0ISX0)
+
