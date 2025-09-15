@@ -1,5 +1,5 @@
 ---
-title:戒为良药 & 《不被大风吹倒》
+title: 戒为良药 & 《不被大风吹倒》
 date: 2025-09-15
 taxonomies:
   tags:

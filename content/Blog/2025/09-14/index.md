@@ -1,5 +1,5 @@
 ---
-title:《戒为良药》
+title: 《戒为良药》
 date: 2025-09-14
 taxonomies:
   tags:

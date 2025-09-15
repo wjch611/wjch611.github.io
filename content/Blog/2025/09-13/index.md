@@ -1,5 +1,5 @@
 ---
-title:随笔
+title: 随笔
 date: 2025-09-13
 taxonomies:
   tags:
