@@ -82,3 +82,9 @@ SY导致的痤疮一般很顽固，属于顽固性痤疮，不戒掉SY真的很�
 ───
 ```
 
+[Good People should know how to Fight](https://www.youtube.com/watch?v=Aod-ayUrzy4)
+
+```
+为了身体和心灵的健康我们必须战斗，就像戒色、锻炼、读书...
+```
+
