@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH • 《一个叫欧维的男人决定去死》</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+
+<script src="https://wjch611.github.io/js/jquery-1.7.2.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      // 清空目录以防重复
+      $("#category").empty();
+  
+      // 添加文章目录
+      $("h2,h3,h4,h5,h6").each(function(i, item) {
+          var tag = $(item).prop("tagName").toLowerCase();
+          var anchorId = "wow" + i;
+          $(item).attr("id", anchorId);
+          // 如果是第一个项目，不加 <br>
+          if (i === 0) {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a>`);
+          } else {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a><br>`); // 添加 <br> 实现换行
+          }
+      });
+  
+      // 设置目录项的缩进
+      $(".newh2").css("margin-left", 0);
+      $(".newh3").css("margin-left", 20);
+      $(".newh4").css("margin-left", 40);
+      $(".newh5").css("margin-left", 60);
+      $(".newh6").css("margin-left", 80);
+  
+      // 处理details元素的展开与收缩
+      document.querySelectorAll('details summary').forEach(function(summary) {
+          summary.addEventListener('click', function() {
+              var details = this.nextElementSibling;
+              details.style.display = details.style.display === 'none' ? 'block' : 'none';
+          });
+      });
+  });
+</script>
+
+<article class="post animated fadeInDown post article-page">
+  <h1><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-09&#x2F;">《一个叫欧维的男人决定去死》</a></h1>
+  <div class="info">
+    
+      <i class="far fa-sun"></i>
+      <i>Push time: 2025-09-09 00:00:00&nbsp;&nbsp;</i>
+    
+
+    
+      <i class="fas fa-tags"></i>
+      
+        <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+      
+    
+
+    <hr>
+  </div>
+  <!-- toc -->
+  <details class="details-2" open>
+    <summary tabindex="-1"><a href="javascript:void(0)"><i class="fa-solid fa-list"></i> 文章目录</a></summary>
+    <div id="category"></div>
+  </details>
+
+  <div class="post-content"><h5 id="zhai-lu">摘录：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span># 1 一个叫欧维的男人买了个不是电脑的电脑
+</span><span>
+</span><span>跟发生在两个突然发觉自己忘带手枪的枪手之间的那种沉默也没太大差别。
+</span><span>2025/9/8 12:40
+</span><span>
+</span><span>───
+</span><span>
+</span><span># 4 一个叫欧维的男人不交三克朗增值税
+</span><span>
+</span><span>欧维用一个所有五十九岁有教养的男人都会做的动作回应：缓缓地用食指点点太阳穴。
+</span><span>2025/9/8 13:27
+</span><span>
+</span><span>───
+</span><span>
+</span><span># 8 一个叫欧维的男人和一对父亲的老脚印
+</span><span>
+</span><span>在失去这个家庭之后，还要等很久，才能自己组建一个家庭来取代它。这是一种非常特别的孤独。
+</span><span>2025/9/8 14:27
+</span><span>
+</span><span>───
+</span><span>
+</span><span># 11 一个叫欧维的男人和那个不从梯子上掉下来就开不了窗的盲流
+</span><span>
+</span><span>努力工作，自食其力，节衣缩食，买了第一辆萨博；接受教育，通过考试，应聘面试，拿到体面的工作，感恩，从不生病，按时缴税；洁身自好；邂逅一个女人，结婚；努力工作，升职；买一辆新型号的萨博；去银行，贷一笔还款年限为五年的款，买座太太觉得适合养育下一代的排屋；分期还款；节衣缩食；买新萨博；去饭店里播放外国音乐的地方度假，喝太太认为别具异国风味的红酒；然后回家继续工作，承担责任，自食其力，洁身自好。
+</span><span>2025/9/8 18:35
+</span><span>
+</span><span>───
+</span><span>
+</span><span># 12 一个叫欧维的男人有所获
+</span><span>
+</span><span>每个人的生命中总有那么一刻决定他们将成为什么样的人：是不是愿意让别人骑在头上。你不了解那个故事，就不了解那个人。
+</span><span>2025/9/8 19:09
+</span><span>
+</span><span>───
+</span><span>
+</span><span>每个人的生命中总有那么一刻决定他们将成为什么样的人。要是你不了解那个故事，就不了解那个人。
+</span><span>2025/9/8 19:15
+</span><span>
+</span><span>───
+</span><span>
+</span><span># 14 一个叫欧维的男人和一个火车上的女人
+</span><span>
+</span><span>他说服一个乘务员借给他一身便服，这样就看不出他是个清洁工了，然后欧维走上前坐在了索雅身边。这是他一生中最出色的决定。
+</span><span>2025/9/8 19:31
+</span><span>
+</span><span>───
+</span><span>
+</span><span>多年以后，她告诉他，她其实觉得他那天在车厢里坐到她身边是件极不寻常的事。他的出现唐突而冒昧，但他有着宽阔的肩膀和坚实的胳膊，把衬衣撑得鼓鼓的。还有温柔的眼神。他倾听她说话，她喜欢逗他发笑。
+</span><span>2025/9/8 19:33
+</span><span>
+</span><span>───
+</span><span>
+</span><span>明天晚上八点整，我在这儿等你。我要你穿上西装带我去饭馆。”一个周五的晚上，她下车后直截了当地说
+</span><span>2025/9/8 19:36
+</span><span>
+</span><span>───
+</span><span>
+</span><span>她把宣传册递给他。课程需要两年时间，事实证明，欧维曾学到的关于房子的一切可能并没像他以为的那样荒废掉。或许他并不是一个传统意义上的好学生，但他理解数字，还了解房子，这就够了。六个月后，他通过一门考试。之后又是一门。然后还有一门。这之后他在建筑工程公司找了份工作，一干就是三分之一个世纪。工作努力，从无病假，还贷缴税，自食其力。还在郊外的树林里买了一栋新建成的联排别墅。她想结婚，欧维就求婚。她想要孩子，孩子可以有，欧维想，要住在联排别墅区内，和别的孩子一起，这个他们知道。
+</span><span>2025/9/8 19:43
+</span><span>
+</span><span>───
+</span><span>
+</span><span>不到四十年之后，房子周围已经没有什么树林，只有其他房子。一天她躺在医院的病床上握着他的手，让他不要难过。一切都会好起来。她说起来容易，欧维想，胸口满是愤怒和悲伤。但她只是把头靠在他的胳膊上，喃喃地说“一切都会好的，亲爱的欧维”。然后小心翼翼地把食指裹进他的掌心，慢慢闭上眼睛，离开了这个世界。
+</span><span>2025/9/8 19:44
+</span><span>
+</span><span>───
+</span><span>
+</span><span>要是有人问起，他会说，在她之前，他没有生活。之后也没有。
+</span><span>2025/9/8 19:44
+</span><span>
+</span><span>───
+</span><span>
+</span><span># 27 一个叫欧维的男人和一场驾车练习
+</span><span>
+</span><span>你有两个孩子，马上第三个就要从你肚子里蹦出来。你来自外国，一定是因为战争、迫害或各种可怕的灾难而背井离乡。你学了一门新的语言，接受教育，支撑着一个显然不怎么好养的家。要是让你再受这世界上哪怕任何一坨屎的惊吓，我就不得好死
+</span><span>2025/9/9 8:11
+</span><span>
+</span><span>───
+</span><span>
+</span><span># 30 一个叫欧维的男人和一个没有他的社会
+</span><span>
+</span><span>只要索雅在，生活就有规律。欧维每天差一刻六点时起床，煮咖啡，出门巡逻。六点半索雅洗完澡，他们一起吃早饭喝咖啡。索雅吃鸡蛋，欧维吃三明治。七点零五分，欧维把她抱到萨博的副驾驶座上，把轮椅塞进后备箱，开车把她送去学校。然后自己开车上班。十点不到一刻，他们各自休息喝杯咖啡。索雅在咖啡里加牛奶，欧维喝黑咖啡。十二点午餐。三点不到一刻又是休息时间。五点一刻，欧维到学校接索雅，把她抱上副驾驶座，把轮椅塞进后备箱。六点他们坐到厨房餐桌前共进晚餐。通常是肉和土豆佐以酱料，这是欧维的最爱。然后她坐到靠椅上垂着毫无知觉的双腿解填字游戏，这时候欧维就去外面的储藏室捣鼓一阵或者看会儿新闻。九点半欧维抱起她去楼上的卧室。
+</span><span>2025/9/9 8:31
+</span><span>
+</span><span>───
+</span></code></pre>
+<h5 id="te-bie-xi-huan">特别喜欢：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>每个人的生命中总有那么一刻决定他们将成为什么样的人。要是你不了解那个故事，就不了解那个人。
+</span></code></pre>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        <!-- 这里可以添加额外的 meta 信息 -->
+        
+        
+        
+    
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <div class="post-navigation">
+          
+          <div class="nav-item prev">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-10&#x2F;" class="nav-link">
+                <i class="fas fa-chevron-left"></i>
+                <span class="nav-title">《白夜行》</span>
+              </a>
+            
+          </div>
+      
+          
+          <div class="nav-item next">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-06-du-shu&#x2F;" class="nav-link">
+                <span class="nav-title">巨人的工具</span>
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+  .post-navigation {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+  }
+
+  .nav-item {
+    flex: 1;
+    max-width: 45%;
+  }
+
+  .nav-item.prev {
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .nav-item.next {
+    text-align: right;
+    padding-left: 1rem;
+  }
+
+  .nav-link {
+    color: #2c3e50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link:hover {
+    color: #3498db;
+    text-decoration: none;
+  }
+
+  .nav-disabled {
+    color: #95a5a6;
+    font-style: italic;
+  }
+
+  .nav-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .nav-title {
+      max-width: 30vw;
+    }
+  }
+</style>
+  
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+

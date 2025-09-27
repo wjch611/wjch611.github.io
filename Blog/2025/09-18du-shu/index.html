@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH • 《戒为良药》</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+
+<script src="https://wjch611.github.io/js/jquery-1.7.2.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      // 清空目录以防重复
+      $("#category").empty();
+  
+      // 添加文章目录
+      $("h2,h3,h4,h5,h6").each(function(i, item) {
+          var tag = $(item).prop("tagName").toLowerCase();
+          var anchorId = "wow" + i;
+          $(item).attr("id", anchorId);
+          // 如果是第一个项目，不加 <br>
+          if (i === 0) {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a>`);
+          } else {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a><br>`); // 添加 <br> 实现换行
+          }
+      });
+  
+      // 设置目录项的缩进
+      $(".newh2").css("margin-left", 0);
+      $(".newh3").css("margin-left", 20);
+      $(".newh4").css("margin-left", 40);
+      $(".newh5").css("margin-left", 60);
+      $(".newh6").css("margin-left", 80);
+  
+      // 处理details元素的展开与收缩
+      document.querySelectorAll('details summary').forEach(function(summary) {
+          summary.addEventListener('click', function() {
+              var details = this.nextElementSibling;
+              details.style.display = details.style.display === 'none' ? 'block' : 'none';
+          });
+      });
+  });
+</script>
+
+<article class="post animated fadeInDown post article-page">
+  <h1><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-18du-shu&#x2F;">《戒为良药》</a></h1>
+  <div class="info">
+    
+      <i class="far fa-sun"></i>
+      <i>Push time: 2025-09-18 00:00:00&nbsp;&nbsp;</i>
+    
+
+    
+      <i class="fas fa-tags"></i>
+      
+        <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+      
+    
+
+    <hr>
+  </div>
+  <!-- toc -->
+  <details class="details-2" open>
+    <summary tabindex="-1"><a href="javascript:void(0)"><i class="fa-solid fa-list"></i> 文章目录</a></summary>
+    <div id="category"></div>
+  </details>
+
+  <div class="post-content"><h5 id="jie-wei-liang-yao">戒为良药：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>内心发善，不求回报：
+</span><span>	一不为名，二不为利。完全是公益性质的，不求任何回报，我也不需要任何人崇拜我，有的戒友会叫我大师，我从来没放在心上，我和各位戒友都是平等的，我就像一个指路人，指路人和问路人是平等的关系，而不是居高临下的关系，我就是这样的一个平凡的指路人，你要问我如何戒色，我可以给你指一条明路。我希望帮到大家，仅此而已。
+</span><span>
+</span><span>度人度己；
+</span><span>	度人其实就是在度曾经的自己，曾经的你也许和现在的他们一样
+</span><span>	
+</span><span>恢复脑力：
+</span><span>	1.要严格控制遗精次数，遗精也很伤身体伤脑力 2.要坚决杜绝YY，YY是暗耗精气 3.要学会养生之道，各种伤肾气的方式都要杜绝。 4.积极锻炼，以有氧运动为主 5.可以尝试打坐或者站桩等养生身功法，包括固肾功 6.营养要跟上，补脑的食品可以适量摄入些
+</span><span>
+</span><span>如果真理的确是在少数人手上：
+</span><span>	当你思想改造过以后，你就会发现你和周围人格格不入了，因为你充分认识到了SY的真相，真正看清了SY的真面目，而大部分人还在麻木不仁地纵欲，在通往自毁的道路上一路狂撸，压根儿没意识到症状就在不远处等着他。现在这个社会是被黄毒和纵欲主义思想污染过的世界，外加无害论的毒害，所以，注定大部分人看不清楚真相，这正好验证了那句话：真理掌握在少数人手中。我们注定是少数知道真相的那部分人，我们要做的就是，在恰当的时机，用恰当的方式去度他们，去度曾经的自己，度人即度己。
+</span><span>	
+</span><span>戒色唯一路：
+</span><span>	那就是通过不断学习提高觉悟。觉悟修到了，自然就戒掉了，等你觉悟非常高了，只要保持警惕，就可以彻底戒掉。而修炼觉悟就像爬山一样，很多人爬到一半，就不想爬了，就下去了，很多人虽然爬得慢，但一直坚持爬，一直在坚持学习戒色文章，不断提高觉悟，虽然进步缓慢，但一直在不断提高，这样他最终依然可以达到觉悟的顶峰，到时再强化一下警惕意识，就可以做到彻底戒掉。
+</span><span>
+</span><span>阳气变化：
+</span><span>	子时一阳生，午时一阴生。故养生之道在子时不行房事，以免戕伐阳气。因为子时阳气刚刚生发起来，好比一个小火星，此时行房事就会很伤阳气，更容易出症状。阳气从子时生发起来，然后逐渐壮大，至午时盛极而衰，然后午时一阴生，然后阴气逐渐壮大，至23点子时盛极而衰，然后子时一阳生，这就是一个循环。而锻炼最好选择在上午，因为上午阳气处于上升阶段，这时候锻炼就是顺应天时，效果会更好，一般晚上入夜适合静养，因为晚上阴气重，这时候锻炼出汗，也很伤阳气。这个道理大家懂了以后，就可以更好地选择锻炼的时机。
+</span><span>
+</span><span>SY与运气：
+</span><span>	运气和SY没啥必然关系，其实是有一定关系的，因为SY会导致脑力下降，脑力正常时，很多事情可以做得很好，而脑力下降时，很多本来可以做好的事情就做不好了，表面上看，好像自己运气变差了。比如一次考试，有的人会说，我当时怎么那么健忘啊，我当时怎么没想到啊，我运气也太差了，其实这种运气差的根源就在于脑力的下降，因为脑力下降，所以你不在状态，这时候人的运气自然就变差了。
+</span></code></pre>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        <!-- 这里可以添加额外的 meta 信息 -->
+        
+        
+        
+    
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <div class="post-navigation">
+          
+          <div class="nav-item prev">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-18dian-ying&#x2F;" class="nav-link">
+                <i class="fas fa-chevron-left"></i>
+                <span class="nav-title">死亡诗社</span>
+              </a>
+            
+          </div>
+      
+          
+          <div class="nav-item next">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-17du-shu&#x2F;" class="nav-link">
+                <span class="nav-title">《戒为良药》 &amp;&amp; 《毛选》 &amp;&amp; 《小王子》</span>
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+  .post-navigation {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+  }
+
+  .nav-item {
+    flex: 1;
+    max-width: 45%;
+  }
+
+  .nav-item.prev {
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .nav-item.next {
+    text-align: right;
+    padding-left: 1rem;
+  }
+
+  .nav-link {
+    color: #2c3e50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link:hover {
+    color: #3498db;
+    text-decoration: none;
+  }
+
+  .nav-disabled {
+    color: #95a5a6;
+    font-style: italic;
+  }
+
+  .nav-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .nav-title {
+      max-width: 30vw;
+    }
+  }
+</style>
+  
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+

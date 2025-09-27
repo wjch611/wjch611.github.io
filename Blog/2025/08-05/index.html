@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH • 思考</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+
+<script src="https://wjch611.github.io/js/jquery-1.7.2.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      // 清空目录以防重复
+      $("#category").empty();
+  
+      // 添加文章目录
+      $("h2,h3,h4,h5,h6").each(function(i, item) {
+          var tag = $(item).prop("tagName").toLowerCase();
+          var anchorId = "wow" + i;
+          $(item).attr("id", anchorId);
+          // 如果是第一个项目，不加 <br>
+          if (i === 0) {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a>`);
+          } else {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a><br>`); // 添加 <br> 实现换行
+          }
+      });
+  
+      // 设置目录项的缩进
+      $(".newh2").css("margin-left", 0);
+      $(".newh3").css("margin-left", 20);
+      $(".newh4").css("margin-left", 40);
+      $(".newh5").css("margin-left", 60);
+      $(".newh6").css("margin-left", 80);
+  
+      // 处理details元素的展开与收缩
+      document.querySelectorAll('details summary').forEach(function(summary) {
+          summary.addEventListener('click', function() {
+              var details = this.nextElementSibling;
+              details.style.display = details.style.display === 'none' ? 'block' : 'none';
+          });
+      });
+  });
+</script>
+
+<article class="post animated fadeInDown post article-page">
+  <h1><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-05&#x2F;">思考</a></h1>
+  <div class="info">
+    
+      <i class="far fa-sun"></i>
+      <i>Push time: 2025-08-05 00:00:00&nbsp;&nbsp;</i>
+    
+
+    
+      <i class="fas fa-tags"></i>
+      
+        <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+      
+    
+
+    <hr>
+  </div>
+  <!-- toc -->
+  <details class="details-2" open>
+    <summary tabindex="-1"><a href="javascript:void(0)"><i class="fa-solid fa-list"></i> 文章目录</a></summary>
+    <div id="category"></div>
+  </details>
+
+  <div class="post-content"><h3 id="sui-bi">随笔：</h3>
+<ul>
+<li>欲望就像病毒一样潜入我的大脑，获得我大脑的控制器，需要巩固大脑，剔除扎根的后门</li>
+<li>何时才能成为一个真正的男人，要尽早意识到这一点，我必须成为一个男人</li>
+<li>我从来没有做好过一件事情
+<ol>
+<li>戒色</li>
+<li>坚持锻炼</li>
+<li>改变作息，坚持早睡早起</li>
+<li>坚持主动学习，克服思想上的困难</li>
+</ol>
+</li>
+</ul>
+<hr />
+<p><strong>2025-8-5：4:47</strong></p>
+<ul>
+<li>男人生来一无所有，去争取才会拥有，争取什么呢？绝对不是，财，色，名，首先要争取的叫自尊，内心的崇拜</li>
+<li>我现在处于绝佳的位置，绝佳的逆境，prefect，我不仅仅一无所有，而且还带着一堆坏习惯，一堆过去失败的记忆</li>
+<li>我要做好几件事，如果我能做到什么事情，我就会获得内心的崇拜呢
+<ol>
+<li>戒色100天（这个是戒色的起点，也是很多人触不可及的地方，戒色是我认为目前最难的事情，没有之一）</li>
+<li>靠漏洞赏金购买一辆拉力（凯越525x）</li>
+<li>严格按照作息行事</li>
+</ol>
+</li>
+</ul>
+<hr />
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        <!-- 这里可以添加额外的 meta 信息 -->
+        
+        
+        
+    
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <div class="post-navigation">
+          
+          <div class="nav-item prev">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-06&#x2F;" class="nav-link">
+                <i class="fas fa-chevron-left"></i>
+                <span class="nav-title">思考</span>
+              </a>
+            
+          </div>
+      
+          
+          <div class="nav-item next">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-04&#x2F;" class="nav-link">
+                <span class="nav-title">记录</span>
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+  .post-navigation {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+  }
+
+  .nav-item {
+    flex: 1;
+    max-width: 45%;
+  }
+
+  .nav-item.prev {
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .nav-item.next {
+    text-align: right;
+    padding-left: 1rem;
+  }
+
+  .nav-link {
+    color: #2c3e50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link:hover {
+    color: #3498db;
+    text-decoration: none;
+  }
+
+  .nav-disabled {
+    color: #95a5a6;
+    font-style: italic;
+  }
+
+  .nav-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .nav-title {
+      max-width: 30vw;
+    }
+  }
+</style>
+  
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+

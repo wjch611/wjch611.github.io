@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheOnlywaypassToyou...</title>
+    <style>
+        :root {
+            --primary-color: #FF6B6B; /* 改为浪漫的粉色 */
+            --background-color: rgba(255,255,255,0.9);
+            --text-color: #333;
+            --border-radius: 10px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
+                        url('https://img.3dmgame.com/uploads/images/news/20190402/1554188025_761476.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+        
+        .container {
+            background-color: var(--background-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        h1 {
+            color: #FF6B6B; /* 粉色标题 */
+            margin-top: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .date-display {
+            font-size: 1.4rem;
+            margin: 20px 0;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .progress-container {
+            background-color: var(--background-color);
+            border-radius: var(--border-radius);
+            height: 40px;
+            margin: 30px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #FF9A9E, #FAD0C4); /* 粉色渐变 */
+            height: 100%;
+            width: 0;
+            border-radius: var(--border-radius);
+            transition: width 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 40px;
+            color: var(--text-color);
+            z-index: 10;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .stat-box {
+            background: var(--background-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            flex: 1;
+            min-width: 120px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .inspiration {
+            margin-top: 30px;
+            font-style: italic;
+            color: #555;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Waiting...</h1>
+        <div class="date-display" id="dateDisplay">正在加载日期...</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="dayOfYear">-</div>
+                <div class="stat-label">已过天数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="daysRemaining">-</div>
+                <div class="stat-label">剩余天数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="percentComplete">0%</div>
+                <div class="stat-label">完成百分比</div>
+            </div>
+        </div>
+        
+        <div class="inspiration" id="inspiration">
+            "时间就像海绵里的水，只要愿挤，总还是有的。" - 鲁迅
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置起始和结束日期
+            const startDate = new Date('2025-08-11');
+            const endDate = new Date('2026-08-11');
+            const now = new Date();
+            
+            // 计算总天数
+            const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            
+            // 计算已过天数
+            const dayOfYear = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            
+            // 确保天数在有效范围内
+            const validDayOfYear = Math.min(Math.max(dayOfYear, 0), totalDays);
+            const daysRemaining = totalDays - validDayOfYear;
+            
+            // 计算完成百分比
+            const percentComplete = ((validDayOfYear / totalDays) * 100).toFixed(2);
+            
+            // 更新显示元素
+            document.getElementById('dateDisplay').textContent = 
+                `今天是 ${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
+            
+            document.getElementById('dayOfYear').textContent = validDayOfYear;
+            document.getElementById('daysRemaining').textContent = daysRemaining;
+            document.getElementById('percentComplete').textContent = percentComplete + '%';
+            
+            // 设置进度条
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            // 使用动画效果显示进度
+            setTimeout(() => {
+                progressBar.style.width = percentComplete + '%';
+                progressText.textContent = percentComplete + '%';
+            }, 500);
+            
+            // 设置浪漫语录
+            const quotes = [
+                "每一天都在向你靠近一点点...",
+                "等待是最长情的告白",
+                "时光飞逝，爱意渐浓",
+                "距离相见的日子又近了一天",
+                "时间的沙漏里，盛满思念",
+                "每一秒的等待都值得",
+                "爱是跨越时间的约定",
+                "我们的故事正在倒计时",
+                "心之所向，素履以往",
+                "在时光里种下爱的种子",
+                "每一天都在向你靠近一点点...",
+                "等待是最长情的告白，时间是最好的证明",
+                "时光飞逝，爱意渐浓，思念在时间中沉淀",
+                "距离相见的日子又近了一天，心跳又加速了一分",
+                "时间的沙漏里，盛满我对你的思念与期待",
+                "每一秒的等待，都让我们的相遇更加珍贵",
+                "爱是跨越时间的约定，心之所向终将抵达",
+                "我们的故事正在倒计时，每一页都值得珍藏",
+                "心之所向，素履以往，只为遇见最好的你",
+                "在时光里种下爱的种子，静待花开那一刻"
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('inspiration').textContent = `"${randomQuote}"`;
+        });
+    </script>
+</body>
+</html>

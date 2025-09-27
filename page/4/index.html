@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a class="current"  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-17&#x2F;"># 再给自己一次机会！</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                再给自己一次机会！
+我认为戒不戒色、用什么方法戒色、抱着什么观念去戒色，都是对于生命或者人生的态度或者理解。我是个老戒色人了，每一次破戒都想着找一个其他的绝妙的想法去戒，比如：撸管和看片是假的、撸管和看片是人生感觉活在梦中的罪魁祸首、我要戒了这些为了去找一个女朋友，寻找真正的爱情.....。但是这些…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-17 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-15&#x2F;"># 第三次破戒！拯救！</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+我发现我的生命在慢慢枯萎，各个方面都是，我在一个人的时候经常陷入空虚，经常被色情困扰，什么事情也不想思考，明明很累很需要休息也休息不好，我还能拯救自己吗，也只能自己拯救自己了，因为没有人会来拯救你，也救不了！
+今天看B站擦边，撸了一次，然后又看片撸了3次还是次，我已经无药可救了，但是既然活…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-15 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-14&#x2F;"># 人生思考</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+
+身心健康是第一位，该花就花
+
+
+学习技术是第二位
+
+
+其他
+
+
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-14 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-12&#x2F;"># 该成熟了</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+
+我早该成熟起来，早该担当起来，早该认清世俗，想想自己还被色情困扰就觉得可笑，想想自己如果就因为学生时期的自卑而失去斗志也觉得不可理喻，我既不是从穷困潦倒而来，从小也没有特别的斗志，而是从小沾染了坏习惯，一路踏着自卑而来，不是很好也不是很坏，难道我的一生就是这样，不好也不坏，我不能成为顶流…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-12 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-11&#x2F;"># 第二次破戒，思考</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+
+破戒原因
+
+刷b站
+脱内裤睡觉（本次）
+
+
+
+成功:
+
+
+精力控制
+
+除了把精力释放在提升自己上，其他时候尽量休息
+不要思考与自己无关的人和事情
+
+
+
+心态管理
+
+感恩与平静
+
+
+
+
+
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-11 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-10&#x2F;"># 成功击败欲望！</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+还是对女朋友的渴望让我战胜了短暂的欲望，我还是想让她早点来到
+克服拖延和困难的方法
+
+制定非常详细的计划，拆解目标，清晰目标，知道如何一步一步到达最终点
+
+
+
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-10 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-09&#x2F;"># 2025-8-9号开始戒色一年 之 第一次破戒</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+我为什么会破戒，因为没有想它的危害，没有想清除它的本质，以及会给我的身体和生活带来的影响
+扎根思想
+
+看片和撸管不是真实的sex，它是假的！
+一切人生的不通透、憋屈、难受都来源于看片和撸管，它是最坏的！
+
+
+为什么戒
+
+只要戒了一年，我一定能找到女朋友
+我的女朋友，就在一年之后等着我，只需…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-09 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-08&#x2F;"># 思考</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+我特别感恩我有网络安全，这么酷的技术，它可以给我想要的一切
+论心态，我最崇拜感恩与淡定
+
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-08 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-06&#x2F;"># 思考</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+当一切都破碎之后，我必须记住，我仍然有能力不成为原来的自己。
+原来一切都是选择题：
+
+短暂的欲望
+阳光、清爽的自己，接纳自己就是接纳整个世界，整个世界！or 欲望，我绝不会再做错选择了！
+
+
+关于原则，我一直以来都是一个原则性很低的人，原则是什么呢，就是纪律，就是让自己恶心的行为，我必须有…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-06 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-05&#x2F;"># 思考</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+欲望就像病毒一样潜入我的大脑，获得我大脑的控制器，需要巩固大脑，剔除扎根的后门
+何时才能成为一个真正的男人，要尽早意识到这一点，我必须成为一个男人
+我从来没有做好过一件事情
+
+戒色
+坚持锻炼
+改变作息，坚持早睡早起
+坚持主动学习，克服思想上的困难
+
+
+
+
+2025-8-5：4:47
+
+男人…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-05 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-04&#x2F;"># 记录</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+被欲望征服+1，这本应该是最低要求，在这一块我一直没有成长，一次又一次失败
+今天离职了
+一切又回到了最糟糕的状态，但是好处是，应该也坏不到哪去了
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-04 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-03&#x2F;"># 人生态度</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+我终于明白，为什么我没有朝气，因为：我追求的是，功利，是财、色、名，为什么要把这些看这么重呢，人生一场真的要被世俗羁绊，而让自己变得这么恶心吗，这么难受吗
+我讨厌自己，讨厌被欲望控制的自己，我今天打了4次，我真nb，我体力真好，我佩服自己，其实我还可以来更多次，去tmd，我不来了，求我也不…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-03 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-02&#x2F;"># 工作反思</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+今天一个公司合伙人说我浪费空调，叫我滚，我让他很难受，我知道，我也很难受，我技术确实不行，我在行为上和心理上各个都有问题，我都很清楚，我不是一个正常人
+我不能承受改变的痛苦，是我的问题，我也鄙视我自己
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-02 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-01&#x2F;"># 工作反思</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+今天被同事或者说前辈说我，是一个没有朝气的人，我是晚上8点的太阳，可是在我的记忆中，没有任何一天我是充满朝气的，我一直否认自己，我不想承认，感觉特别奇怪说出来，我总是看着那些天才，那些又有实力，又年轻，又有活力的人就是我眼中的天才。
+我对技术止步了
+
+好像因为疲惫，眼睛问题，.....
+压…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-08-01 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;07-31&#x2F;"># 工作反思</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                随笔：
+
+今天感觉自己的状态又跑了，我需要做到以下几点
+
+平静而坚定
+不要忘记自己的初心：红队中级，要从大局观考虑，目前的目标是把资产收集和漏洞挖掘学精
+
+
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-07-31 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+  
+  <div class="pagination">
+    <ul class="clearfix">
+      
+        <li class="next pagbuttons">
+          <a class="btn" role="navigation" href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;page&#x2F;5&#x2F;" aria-label="Next Page">
+            Next Page
+          </a>
+        </li>
+      
+      
+        <li class="pre pagbuttons">
+          <a class="btn" role="navigation" href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;page&#x2F;3&#x2F;" aria-label="Last Page">
+            Last Page
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+

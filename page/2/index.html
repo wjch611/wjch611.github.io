@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a class="current"  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-19&#x2F;"># 随笔</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                反思：
+1. 不应该思考到底要不要穿内裤，到底要不要裸睡，就是放纵的借口，害得我睡不着觉，失眠
+2. 最近一直失眠，再这样完蛋了
+3. 最近学习戒色文章激情不好了，看书也没看了
+4. 最近背也挺不直了
+5. 最近脸色难看的要是，感觉刚刚撸过一样
+6. 最近又开始刷视频了
+
+规律：
+1. 只做：睡觉、…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-19 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-19du-shu&#x2F;"># 《戒为良药》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                哲理：
+1. 眼乃一身之精华，不宜不秀
+2. 五脏六腑之精气皆上注于目！
+3. 心动则精自走
+
+戒为良药：
+熬过破戒高峰期&#x2F;戒色厌倦期：
+1.一旦出现厌倦情绪，要学会分配体力，不要把自己搞得太累。就像跑1500米，跑不动了，不要不跑，而是跑慢点，继续前进。
+
+2.要学会激励自己，激励自己就是在调整情…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-19 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-18&#x2F;"># 随笔</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                1. 人们其实不知道：最大的快乐是内在寻求达到完全控制念头的境界，你不是念头，你观察念头，利用好的念头，断掉不好的念头，不需要时就不要有任何念头阻止你感受当下。
+2. 好的戒色状态是非常宝贵的，一旦破戒就很难恢复到这个戒色状态。
+
+我的困惑：
+1. 虽然已经控制住了各种各样的念头，但是我仍然感觉不太…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-18 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-18dian-ying&#x2F;"># 死亡诗社</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                死亡诗社：
+1. carpe diem &amp;amp; seize the day
+2. the powerful play goes on, and you may contribute a verse
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-18 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/dian-ying/">电影&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-18du-shu&#x2F;"># 《戒为良药》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                戒为良药：
+内心发善，不求回报：
+	一不为名，二不为利。完全是公益性质的，不求任何回报，我也不需要任何人崇拜我，有的戒友会叫我大师，我从来没放在心上，我和各位戒友都是平等的，我就像一个指路人，指路人和问路人是平等的关系，而不是居高临下的关系，我就是这样的一个平凡的指路人，你要问我如何戒色，我可以给你…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-18 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-17du-shu&#x2F;"># 《戒为良药》 &amp;&amp; 《毛选》 &amp;&amp; 《小王子》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                哲理：
+“一切物质都是波动的现象，皆是人们的错觉，宇宙间只有场和物质这两种东西，实际上只有场，物质不过是场里场强特别高的地方。”——爱因斯坦
+
+“任何事物以及产生的效果都是波动的(vibration)，没有任何实物存在，所有的实物都包含波动。”——普朗克
+
+“这个世界是意识的全息图，现实是幻象，是存…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-17 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-16&#x2F;"># 随笔</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                
+
+读《戒为良药》
+
+读《白鹿原》
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-16 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-16du-shu&#x2F;"># 《戒为良药》 &amp; 《白鹿原》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                哲理：
+入芝兰之室，久而不闻其香；入鲍鱼之肆，久而不闻其臭。
+
+戒为良药：
+肾气值为5000，这个数值是我打比方用的，只是希望大家能更容易明白。
+
+-为减号
+
+1.SY（-600） 2.久坐（-300） 3.熬夜（-300） 4.生气（-300） 5.吃冷饮（-100） 6.吹空调（-100） 7.…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-16 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-15&#x2F;"># 随笔</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                明天计划：
+
+
+开始再次培养学习英语的习惯（句模方法）
+
+读一本书
+
+学习戒为良药
+
+更新blog
+
+制作一个视频收藏目录
+重新上线音乐目录（调整为纯音乐）
+
+
+
+我的sifu:
+
+
+ryan
+ryan robinson - YouTube
+
+
+tyson
+Tyson Liberto - YouTu…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-15 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-15du-shu&#x2F;"># 戒为良药 &amp; 《不被大风吹倒》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                1. 发现了一个生活小妙招
+	人要在身体上端正其实挺的是&amp;quot;脊梁骨&amp;quot;，也就是腰，而不是胸.
+
+戒为良药：
+1. SY的危害
+	一般最先出现问题的是泌尿系统疾病，以前列腺炎为主。然后肾一虚，肾虚百病丛生，什么毛病都可能出现，脑力下降也很普遍，中医：肾上通于脑。SY伤肾必伤脑力，记忆力…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-15 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-14&#x2F;"># 《戒为良药》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                1. 我认为一个人第一件事就是去达到自己最好的状态，我称之为&amp;quot;神在&amp;quot;（每个人虽然是爹生妈养，但是生命本身就是奇迹，一种超出科学解释范围的存在，因为没有人能够回答，生命为什么存在？这个问题），所谓&amp;quot;神在&amp;quot;就是与神同在，这里统一把超出科学解释范围活着超出人为掌控的…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-14 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-13&#x2F;"># 随笔</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                1. 我非常喜欢《当下的力量》，这是唯一一本让我流泪的书，那是无数感同身受的结果，可是我还没有达到书中的境界，那种无念的状态就是与神同在的临在状态。
+2. 我非常喜欢的博主：
+	1. 柴的助眠planet，这个女孩子是我有生以来感到最纯洁、善良、安详、温柔的了，她就像天上的云朵一样，希望她永远也不要…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-13 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-12&#x2F;"># 随笔</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                感悟：
+    1.我看完了《平凡的世界》，太多的活生生的人物， 可爱的人物，动人的故事，我必须承认现实远没有小说中来的多彩，人物也没有其中的有特色与灵魂，至少我自己是这样。更何况我现在也很困苦 ，我也不知道下一步该去向何地 ，甚至我觉得我自己还远没有成熟  或者说接纳自己 。我觉得这是做一个人的第…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-12 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-12du-shu&#x2F;"># 《平凡的世界》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                摘录：
+# 平凡的世界（第一部）
+
+## 卷一
+
+### 第十八章
+
+他面对着远方模糊的山峦，真想狂喊一声——他并不知道自己此刻眼里含满了泪水……
+
+在他背后，县城已经一片灯火灿烂了。家家户户现在也许都围坐在一起，开始吃晚饭。此刻，谁能知道，在城外，在昏暗的河边上，站着一个痛苦而绝望的乡下来的青年，…
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-12 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="post animated fadeInDown">
+      <div class="post-wrapper">
+        <div class="post-content-wrapper">
+          <div class="post-title">
+            <h3><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-11-du-shu&#x2F;"># 《戒为良药》</a></h3>
+          </div>
+          <div class="post-content">
+            <p>
+              
+                摘录：
+1. 嗜欲深者天机浅
+2. 潜龙勿用
+
+
+              
+            </p>
+          </div>
+          <div class="post-footer">
+            <div class="meta">
+              <div class="info">
+                
+                  <i class="far fa-sun"></i><i> Push time: 2025-09-11 00:00:00&nbsp;&nbsp;</i>
+                
+                
+                  <i class="fas fa-tags"></i>
+                  
+                    <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+                  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+  
+  <div class="pagination">
+    <ul class="clearfix">
+      
+        <li class="next pagbuttons">
+          <a class="btn" role="navigation" href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;page&#x2F;3&#x2F;" aria-label="Next Page">
+            Next Page
+          </a>
+        </li>
+      
+      
+        <li class="pre pagbuttons">
+          <a class="btn" role="navigation" href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;" aria-label="Last Page">
+            Last Page
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+

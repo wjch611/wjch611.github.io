@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH • 《戒为良药》</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+
+<script src="https://wjch611.github.io/js/jquery-1.7.2.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      // 清空目录以防重复
+      $("#category").empty();
+  
+      // 添加文章目录
+      $("h2,h3,h4,h5,h6").each(function(i, item) {
+          var tag = $(item).prop("tagName").toLowerCase();
+          var anchorId = "wow" + i;
+          $(item).attr("id", anchorId);
+          // 如果是第一个项目，不加 <br>
+          if (i === 0) {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a>`);
+          } else {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a><br>`); // 添加 <br> 实现换行
+          }
+      });
+  
+      // 设置目录项的缩进
+      $(".newh2").css("margin-left", 0);
+      $(".newh3").css("margin-left", 20);
+      $(".newh4").css("margin-left", 40);
+      $(".newh5").css("margin-left", 60);
+      $(".newh6").css("margin-left", 80);
+  
+      // 处理details元素的展开与收缩
+      document.querySelectorAll('details summary').forEach(function(summary) {
+          summary.addEventListener('click', function() {
+              var details = this.nextElementSibling;
+              details.style.display = details.style.display === 'none' ? 'block' : 'none';
+          });
+      });
+  });
+</script>
+
+<article class="post animated fadeInDown post article-page">
+  <h1><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-24-du-shu&#x2F;">《戒为良药》</a></h1>
+  <div class="info">
+    
+      <i class="far fa-sun"></i>
+      <i>Push time: 2025-09-24 00:00:00&nbsp;&nbsp;</i>
+    
+
+    
+      <i class="fas fa-tags"></i>
+      
+        <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+      
+    
+
+    <hr>
+  </div>
+  <!-- toc -->
+  <details class="details-2" open>
+    <summary tabindex="-1"><a href="javascript:void(0)"><i class="fa-solid fa-list"></i> 文章目录</a></summary>
+    <div id="category"></div>
+  </details>
+
+  <div class="post-content"><h5 id="jie-wei-liang-yao">戒为良药：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>国外性开放比较早，但他们已经意识到了性开放的恶果，开始提倡禁欲思想。国外很多年轻人都有宗教信仰，宗教信仰对于邪淫有约束作用，但是中国的年轻一代绝大多数都是无神论者，因为不懂因果，信仰缺失，就变得更加肆无忌惮，变得更猖狂。这是中国年轻一代的悲哀，别的国家已经意识到了性开放的恶果，而我们国家还在继续搞性开放，在错误的道路上越走越远。
+</span><span>
+</span><span>我奉劝你们尽量不要有婚前性行为，在结婚前应该把身体养养好，进入婚姻后再节制性生活，有一个好身体才是最重要的，千万不要未婚先废，那样会很尴尬，人生也会变得异常灰暗。婚前性也不是一种负责的行为，很多人纯粹是为了满足自己的欲望。还有的人一开始想好好谈场恋爱结婚，结果彻底迷失在了欲望的泥潭里，厌倦了又把别人抛弃。我们谈恋爱还是要慎重些，不能随随便便发生关系，请做一个真正负责的男人。
+</span><span>
+</span><span>【飞翔哥，为什么我总感觉脸上很脏，毛孔粗大呢？戒多长时间可以恢复？】
+</span><span>
+</span><span>答：考虑内分泌紊乱了，撸管的人，很多都是出油、晦暗、毛孔粗大，然后就是洗不干净，洗很多次都没用。一般坚持戒色养生，积极锻炼，坚持三个月就会变干净变清透，另外遗精频率也需要严格控制。加油！
+</span><span>
+</span><span>附评：撸管的人根据体质不同，症状表现也会有所不同。有一类戒友，他们就会出现脸脏、毛孔粗大、出油，怎么洗也洗不干净，脸上极易过敏。还有的戒友虽然毛孔肤质伤害不大，但是气色下降很厉害，气质猥琐，双眼无神，神似僵尸，眼睛也会变形，甚至脸型也会发生改变。脸上洗不干净，毛孔粗大，一般都有痤疮问题。撸管是会导致内分泌失调的，我原来就是脸上洗不干净，并且有痤疮，那时我以为是青春期的正常现象，后来发现不是，因为很多中年男人也是满脸痤疮，其实就是纵欲导致的内分泌失调。一般坚持戒色养生，积极锻炼，三个月左右即可改善很多，脸庞会重新变清透，会重新变亮，眼神也会变得很有神采，会重新恢复精气神。这是很微妙的感觉，如果你细心观察就会发现的，撸管是会让人变质腐烂的，而戒撸会让你重新恢复新鲜！那种新鲜就像新鲜的水果一样，新鲜的水果有一种清透饱满的气场，能让人感觉舒服愉快。而撸管的人就像变质过期的水果，脸上晦暗，远看像一层灰笼罩着，一点也不精神，让人一看就容易生厌。
+</span><span>
+</span><span>克服意淫 意淫就像火 防淫如防火 意淫之火的规律就是 在刚烧起来时好灭， 小火是容易扑灭的， 如果烧成大火了就难灭了， 所以不怕念起，就怕觉迟。 断意淫贵快贵狠！ 绝对不能迟疑和犹豫！
+</span><span>
+</span><span>心髓阐微：意淫关，是戒色的拦路虎。这关也是必须过的，意淫是暗漏，伤害也是非常之大的。很多戒色新人会问，光看不撸有害吗？如果你有一定的中医常识，就会知道心动则精自走，只要心动了，精就会失其正位，心一动，元精变浊精。当然，这里的心动，是指沉迷意淫，如果意淫刚起来就断掉，那就没事，如果你沉迷意淫，身体就会遭到伤害。无数戒友都反馈过，在意淫后身体出现了症状反复，特别前列腺炎的症状反复或者出现睾丸不适。所以，一定要学会克服意淫，过了意淫关，其实就成功了一半，过了意淫关，戒色天数就会突飞猛进！
+</span><span>
+</span><span>控制意淫，其实就是控制念头。假使一个人一天有100个念头，其中10个是邪念，你要做的就是净化你的念头，净化你的心相续。我们的念头可以组成一条河流，不要让邪念污染这条河流。我们小时候的心相续就比较纯净，像一泓清泉，但是大了以后，邪念增多，心相续就被污染了。而在一个邪淫泛滥的年代，这种污染是异常严重的。有的人可能一天有几十个乃至上百个意淫的念头，他的心相续就像一条发臭的河流，而心的污染，就会导致身体出现各种问题，因为身心是合一的，相由心生，心被污染了，迟早会反映在身体上，更会反映在脸上。比如双眼无神，气色差，眼袋黑眼圈，肤质下降，身体也容易发臭。有一个词叫戒定真香，因为戒色，心得到了净化，身心合一，身体也会飘出清香，这是很微妙的感觉。那种香，就像小男孩的体香一样，未曾污染的心灵，他的身体也会发出清香。一旦心被污染，性能量大量走失，身体就会发臭，自己都觉得自己恶心猥琐。小男孩的气场是清透纯正的，眼神明亮清澈，而邪淫之人的气场，是污浊邪恶的，一看就有一种说不出来的邪气和晦气。
+</span><span>
+</span><span>废掉的公式： 熬夜+纵欲+久坐=完蛋
+</span><span>
+</span><span>关于一次性戒色成功，可能有些戒友还存有异议。有人说可以一次性成功，有人说不能。首先要弄清两个概念：人生的第一次戒色就成功和反复失败后再一次性成功。这是两个完全不同的概念，人生的第一次戒色就成功，这样的人凤毛麟角，即使有，也是万里挑一的戒色奇才。就好比一个冲关游戏，以前从来没玩过，然后第一次玩，谁能保证第一次玩这个游戏就能冲关成功？一般的情况都是反复失败多次，然后总结经验教训，加强学习，这样才有可能冲关成功，况且色关的难度系数是很高的，特别是在这个邪淫泛滥的年代，到处都是诱惑。
+</span><span>
+</span><span>女人是用来传宗接代的，并不是给你纵欲的，古大德有建议生孩子后就分居，这是比较明智的选择。阴阳互补，不是纵欲的理由，因为人体自有阴阳，并不是男人全阳，女人全阴，男人女人身中就各有阴阳。
+</span><span>
+</span><span>1.平时多背，形成条件反射，就像电脑中病毒，杀毒软件第一时间拦截，然后就灭掉了，要达到这种程度。2.要看严重程度，手术的话，可能就要几千了。3.看到暴露图片，马上避开，如果勃起了，那说明你避开太慢了，就像要避开车祸一样。4.要么是瘙痒或者阴囊潮湿，要么就是敏感现象。5.坚持戒色养生，敏感现象是会慢慢改善的，平时不要去注意，勃起了不要去关注，自己就会下去，切忌勃起后YY，那样就极易破戒。
+</span><span>
+</span><span>附评：意淫关，是必须过的一关，一方面要加强学习提高综合觉悟，另外就要学会控制自己的念头，一般建议熟背断意淫口诀，要达到滚瓜烂熟的程度，直至形成条件反射，不需要思想挣扎即可轻松断掉意淫。要达到这个境界，只有不断重复、重复、再重复。很多资深戒友在面对诱惑时的第一反应还是不对，这就是戒色意识不行，面对诱惑，不要飞蛾扑火，而是要马上避开，菩萨见欲，如避火坑。诱惑就像车祸一样，一辆大卡车向你撞来，你的第一反应是什么？难道是迎着卡车撞上去？！那不是找死吗？所以，面对诱惑，第一反应一定要正确，第一反应不正确的戒友，很可能会出现破戒。另外，网上到处是黄色地雷，很多擦边图也要及时避开，不要纵容自己的好奇心，好奇害死猫，一定要格外警惕，一定要强化自己的第一反应，面对诱惑的第一反应一定要正确。正确者顺利通过魔考，第一反应不正确，很可能就会破戒。
+</span><span>
+</span><span>
+</span><span>如果你没听说过75党，你不是一个真正的戒色人； 如果你没听说过75党，你还被蒙在鼓里； 如果你没听说过75党，你就不会了解内幕； 如果你没听说过75党，你就是阴谋的受害者； 75党，对于很多戒色新人，是一个传说， 75党，对于很多戒色新人，从来没听说过， 它在网络上突然出现，又突然消失， 但它干的那些事情令人发指， 疯狂撒播无害论毒害中国的年轻一代！
+</span><span>
+</span><span>关于75党：
+</span><span>
+</span><span>很多人对于75党，根本没听说过。75党就是网特（网络特务），IP显示在美国，所谓75党，其实就是一个IP开头为75的地址，专门在网上撒播无害论，向青年灌输无害论，毒害广大的中国青年乃至青少年一代。虽然IP显示在美国，但经过调查，撒播无害论的人很可能在中国，他使用的是美国的代理服务器，百度百科自慰词条也是他编辑的，他经常冒充专家教授，打着科学的幌子编造无害论，后来他转战博客，又自称“自慰专家”。关于他为什么要这么做，其实他不打自招了，他早期的很多发言都带着“李大师”，上世纪九十年代末的时候，某某功的创始人逃亡美国，开始指使国内的徒弟干坏事，30岁以上的戒友应该能清楚地记得九十年代末时，国家曾取缔过某某功，20岁的戒友可能不记得了，因为十年前才十岁，可能不会关心这类问题。
+</span><span>
+</span><span>我仔细研究过75的发言，里面多次提到“中国大陆”，这说明写此言论的人很可能在美国，而在中国的同伙则负责撒播的工作。他们绝对是一个团伙，一个组织，不是一个人在单干。一个人是不会这样干的，就是精神病也不可能。75的目的很明确，就是用无害论毒害中国的年轻一代，这个用心极其险恶！
+</span><span>
+</span><span>如果说手淫无害，为何美国近年有提倡婚前禁欲主义？美国现在也有戒色学校，还有专门的戒性瘾机构，还有很多这方面的专业书籍，里面也专门阐述了纵欲的危害。其实西方在戒色方面还是很有研究的，只不过国人还接触不到这方面的内容，老外走过一段很曲折的道路，后来才发现婚前禁欲是一种很好的选择。老外现在的想法和认识，其实和我国古圣先贤的教诲是不谋而合的，孔子也提倡过戒色，老子也说无欲，教也提倡禁欲，儒释道对于戒色的认识其实都是一样的，圣人都是如此教诲。当然，对于普通人而言，夫妻的正淫是符合人伦的，但也要注意节制，否则身体也一样会废掉的。古圣先贤的教诲是不会错的，因为这是拥有极高智慧的人才能说出的道理，绝对不是一般凡愚之人的浅陋见解。
+</span><span>
+</span><span>手淫有没有害，不是看无害论，而是要看真实的受害者案例，从研究事实出发，这样才能得出最接近真相的结论。
+</span><span>
+</span><span>首先，请弄清楚什么是封建思想！我不认为古圣先贤的珍贵教诲是封建思想，孔子提倡过戒色，老子提倡无欲，他们都是中国伟大的圣贤，他们的思想不是封建思想，而是高度的智慧！如果你说裹小脚是封建思想，那我同意。如果你以偏概全，认为古圣先贤的智慧是封建思想，那我不敢苟同。“宗教般的宣传”，那要看具体情况了，劝人向善的宣传，应该越多越好，越普及越好！劝人戒手淫，是正确的事情，应该加大宣传力度才是。如果自慰不是肮脏的事情，那为何要自己一个人躲起来手淫，还怕别人见着？套弄自己的生殖器，难道这种行为很高尚很美观吗？“造成不必要的精神负担”，是有一些人在刚开始手淫时会有负罪感，但是随着手淫次数增多也就麻木了，真正的精神负担，是在出症状以后才出现的，撸出一身的症状，并且伴随心理失调，这时候才会出现真正的精神负担！
+</span><span>
+</span><span>解决欲望，获得满足和缓解，这就好比刀口舔蜜，必有割舌之患，淫欲放纵，如饮咸水，多饮多渴，到死方休！而且手淫是先爽后苦，症状出来后你就知道什么是手淫的代价了！螳螂捕蝉黄雀在后！症状搞死你！
+</span></code></pre>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        <!-- 这里可以添加额外的 meta 信息 -->
+        
+        
+        
+    
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <div class="post-navigation">
+          
+          <div class="nav-item prev">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-27-du-shu&#x2F;" class="nav-link">
+                <i class="fas fa-chevron-left"></i>
+                <span class="nav-title">《戒为良药》 &amp; 《一个瑜伽行者的自传》</span>
+              </a>
+            
+          </div>
+      
+          
+          <div class="nav-item next">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-24&#x2F;" class="nav-link">
+                <span class="nav-title">忏悔</span>
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+  .post-navigation {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+  }
+
+  .nav-item {
+    flex: 1;
+    max-width: 45%;
+  }
+
+  .nav-item.prev {
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .nav-item.next {
+    text-align: right;
+    padding-left: 1rem;
+  }
+
+  .nav-link {
+    color: #2c3e50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link:hover {
+    color: #3498db;
+    text-decoration: none;
+  }
+
+  .nav-disabled {
+    color: #95a5a6;
+    font-style: italic;
+  }
+
+  .nav-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .nav-title {
+      max-width: 30vw;
+    }
+  }
+</style>
+  
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+

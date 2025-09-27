@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH • 《戒为良药》</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+
+<script src="https://wjch611.github.io/js/jquery-1.7.2.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      // 清空目录以防重复
+      $("#category").empty();
+  
+      // 添加文章目录
+      $("h2,h3,h4,h5,h6").each(function(i, item) {
+          var tag = $(item).prop("tagName").toLowerCase();
+          var anchorId = "wow" + i;
+          $(item).attr("id", anchorId);
+          // 如果是第一个项目，不加 <br>
+          if (i === 0) {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a>`);
+          } else {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a><br>`); // 添加 <br> 实现换行
+          }
+      });
+  
+      // 设置目录项的缩进
+      $(".newh2").css("margin-left", 0);
+      $(".newh3").css("margin-left", 20);
+      $(".newh4").css("margin-left", 40);
+      $(".newh5").css("margin-left", 60);
+      $(".newh6").css("margin-left", 80);
+  
+      // 处理details元素的展开与收缩
+      document.querySelectorAll('details summary').forEach(function(summary) {
+          summary.addEventListener('click', function() {
+              var details = this.nextElementSibling;
+              details.style.display = details.style.display === 'none' ? 'block' : 'none';
+          });
+      });
+  });
+</script>
+
+<article class="post animated fadeInDown post article-page">
+  <h1><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-23-du-shu&#x2F;">《戒为良药》</a></h1>
+  <div class="info">
+    
+      <i class="far fa-sun"></i>
+      <i>Push time: 2025-09-23 00:00:00&nbsp;&nbsp;</i>
+    
+
+    
+      <i class="fas fa-tags"></i>
+      
+        <a class="tag" href="https://wjch611.github.io/tags/du-shu/">读书&nbsp;&nbsp;</a>
+      
+    
+
+    <hr>
+  </div>
+  <!-- toc -->
+  <details class="details-2" open>
+    <summary tabindex="-1"><a href="javascript:void(0)"><i class="fa-solid fa-list"></i> 文章目录</a></summary>
+    <div id="category"></div>
+  </details>
+
+  <div class="post-content"><h5 id="shu-liao">树疗：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>1.选择一棵树，我推荐银杏或者香樟，树龄在十年以上，树干应该相对干净点的。当然别的树大家也可以试试。 2.双手抱住树干，眉间印堂贴住树干，观想树的净化能量从劳宫穴和印堂穴进入你的身体，净化你的气场。 3.用两侧脸颊贴住树干，左右分开做，可以先左脸颊再右脸颊，各贴20分钟以上。 4.注意调心，保持感恩之心，信的戒友可以念号。 5.尽量选择白天练习，有太阳则更好。 6.每次练习不少于2个小时，如果很忙，至少保持1个小时以上。 7.每次练习的第二天晨起洗脸后，要注意观察效果，注意微妙好变化的发生。 8.向阳是关键，不要在树荫下抱，选择有阳光直射的、干净的大树干。 9.树种有讲究，桉树等树不适合。 10.可以不观想，无聊的话可以听歌。
+</span></code></pre>
+<h5 id="yang-sheng-zhuang">养生桩：</h5>
+<p><a href="https://www.bilibili.com/video/BV1t54y1T7nF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=287c406d84fbdcc67d8f3b2e36d4e981">站桩：提升精气神的法宝 | 培补元气、经脉畅通。（15分钟导引 跟练版）_哔哩哔哩_bilibili</a></p>
+<h5 id="jie-wei-liang-yao">戒为良药：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>戒色成功的最关键标志就是：进入戒色稳定期，基本无意淫！
+</span><span>
+</span><span>戒色稳定期是很多戒友梦寐以求的终极戒色状态，就像金字塔的塔尖一般，当你进入戒色稳定期了，基本就可以算成功了，只要你能保持足够的警惕守住戒色成果，那就可以算彻底成功了。
+</span><span>
+</span><span>如果把戒色比作一项运动，可以说是铁人三项。断意淫是其中一个专项，警惕意识也是一个专项，如何控制遗精也是一个专项，情绪管理也是一项，养生意识也是一项，学习意识也是一项。准确地说，应该是“戒色六项”。
+</span><span>
+</span><span>几种控制遗精频率的方法：
+</span><span>
+</span><span>1.固肾功 2.睡姿吉祥卧 3.缩肛功 4.仰卧起坐或者仰卧举腿 5.铁板桥 6.站桩
+</span><span>
+</span><span>我建议你积极锻炼，注意养生之道。要在养生方面下功夫，多学习养生文章和视频，提升自己的养生意识。只戒不养，难以恢复的。
+</span><span>
+</span><span>我那时一直在找恢复方法，也一直在试恢复方法，对我帮助比较大的，一是固肾功，让我控制了遗精频率；二，站桩和打坐；三，有氧运动；四，艾灸。
+</span><span>
+</span><span>《撸管即地狱》
+</span><span>
+</span><span>我看见，一颗颗炮弹打向中国 炮弹里装满了AV 中国的年轻一代 成万上亿地倒下
+</span><span>
+</span><span>和炮弹一起飞过来的 还有适度无害论的宣传单 青年看了这些宣传单后 撸得更加心安理得 但是症状绝对不会放过他们 症状会把他们拽回现实 温水青蛙迟早会被烫醒
+</span><span>
+</span><span>其实他们知道无害论不靠谱 因为症状很明显 在每一次放纵过后 他们脑中起先浮现出一丝懊悔 继而又浮现出无害论 用无害论的观点不断麻醉自己 不断欺骗安慰自己 在撸管的陷阱里越陷越深 无法自控不能自拔
+</span><span>
+</span><span>曾经纯真无邪的眼神消失了 曾经清亮明润的气色不见了 曾经阳光开朗的心态失去了
+</span><span>
+</span><span>镜子里的人 变成了一个双面人 在父母老师同学眼中 他还是他 但只有他自己知道 他已经不是原来那个纯净的自己了
+</span><span>
+</span><span>更有甚者，镜子里出现了行尸走肉 出现了怪物，满脸脓包粉刺痤疮的怪物， 脸颊深陷或者脸庞浮肿 面带鬼气猥琐不堪 怎么看都像一个废物
+</span><span>
+</span><span>我看见 某个青年拿出撸管前的照片 他泪流满面 照片中的孩子清秀帅气 而现在的他 就是一个让自己都觉得恶心的垃圾
+</span><span>
+</span><span>我看见某个青年 开始逃避镜子 因为镜子里的人已经变得奇丑无比 和以前的他判若两人 他现在看到镜子就想砸掉 要知道 以前的他是多么喜欢照镜子 而现在只有无限的自卑与无奈 像乌云般笼罩着他
+</span><span>
+</span><span>我看见 某个青年去看医生 医生无情宣判 你得前列腺炎了 你得精索了 你早泄了 我看见他在收费处 为自己的放纵买单
+</span><span>
+</span><span>我看见 某个青年躺在手术台上 他问自己 为何自己会出现在手术台上 接着他心里狠狠地骂了一句： 该死的撸管 该死的无害论 害惨我了啊！ 他无助地躺在手术台上 像只待宰的羔羊
+</span><span>
+</span><span>撸到后来 你会发现你的人生变成了一场悲剧 快乐是那么短暂 而痛苦却始终如影随形 反复折磨着你
+</span><span>
+</span><span>撸到后来 你会发现原来撸管会导致那么多症状 而自己曾经只知道两三种 其实有几十种乃至上百种 你撸得太多 却知道得太少 你的人生悲剧 在第一次撸管时就埋下了伏笔
+</span><span>
+</span><span>撸管即地狱 你现在要做的就是 彻底戒掉它 就像老烟枪戒掉香烟 就像老酒鬼戒掉酒精 你必须戒掉撸管 别无选择 别让撸管毁掉你的健康 别让撸管毁掉你的容貌 别让撸管毁掉你整个人生
+</span><span>
+</span><span>当你最终爬出撸管地狱 呼吸到第一口纯净的空气时 你甚至会嚎啕大哭 阳光再一次眷顾了你 这时你才会真正明白 什么叫珍惜
+</span><span>
+</span><span>总之，当时我就去拥抱树木了，拥抱这种姿势可以让人感觉一种心灵的慰藉，可以让身心舒畅，在拥抱的一刹那，树木的气场已经在影响你的气场了。当我拥抱树木时，我就给它念号，因为有科学研究表明，植物也是有喜怒哀乐的，对待植物应该感恩，因为没有植物，我们的空气会很糟糕。所以我当时一边念号，一边拥抱着树木，我能感觉到树木宁静祥和的气场，那种气场可以让我浮躁的心灵瞬间变得平和。
+</span><span>
+</span><span>这时，大脑里有一个声音告诉我，应该双手抱住树木，眉间的印堂贴住树木，然后观想树的能量通过手掌劳宫穴和印堂穴进入自己的身体，净化自己的气场，同时，我必须对树木保持无比感恩的心态。我当时就是这样做的，三年前我亲近树木，只是用手摸，并没有用脸去亲近，当我用脸亲近树木三天，每天大概2个小时，奇迹发生了，我只能用奇迹这个字眼，我想不出哪个词汇更能表达我当时的感觉，第四天我早上起来洗脸，洗完照镜子，发现气色变得特别特别好，脸比以前干净很多，开始变得通透饱满起来，那种饱满的感觉，让我想起了发育前的孩子，脸上异常干净
+</span><span>
+</span><span>树木，气场是不同的，就像不同的树木，你去摸，你会发现它的体温是不同的，有的树木体温偏低，有的摸上去则是温暖的感觉，我很多树木都摸过，我发现大树的气场更强大，另外各种树木中，银杏树和香樟树感觉最好
+</span><span>
+</span><span>1.选择一棵树，我推荐银杏或者香樟，树龄在十年以上，树干应该相对干净点的。当然别的树大家也可以试试。 2.双手抱住树干，眉间印堂贴住树干，观想树的净化能量从劳宫穴和印堂穴进入你的身体，净化你的气场。 3.用两侧脸颊贴住树干，左右分开做，可以先左脸颊再右脸颊，各贴20分钟以上。 4.注意调心，保持感恩之心，信的戒友可以念号。 5.尽量选择白天练习，有太阳则更好。 6.每次练习不少于2个小时，如果很忙，至少保持1个小时以上。 7.每次练习的第二天晨起洗脸后，要注意观察效果，注意微妙好变化的发生。 8.向阳是关键，不要在树荫下抱，选择有阳光直射的、干净的大树干。 9.树种有讲究，桉树等树不适合。 10.可以不观想，无聊的话可以听歌。
+</span><span>
+</span><span>干净的树是要自己找的，当你找到属于自己的树后，就会慢慢和这棵树建立感情，当你和树拥抱时，树也可以给你一种心灵的慰藉，慢慢地，你就会真正喜欢上树疗，真正开始享受树疗的感觉了。
+</span></code></pre>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        <!-- 这里可以添加额外的 meta 信息 -->
+        
+        
+        
+    
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <div class="post-navigation">
+          
+          <div class="nav-item prev">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-24&#x2F;" class="nav-link">
+                <i class="fas fa-chevron-left"></i>
+                <span class="nav-title">忏悔</span>
+              </a>
+            
+          </div>
+      
+          
+          <div class="nav-item next">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;09-23&#x2F;" class="nav-link">
+                <span class="nav-title">君子坦荡荡！问心无愧！</span>
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+  .post-navigation {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+  }
+
+  .nav-item {
+    flex: 1;
+    max-width: 45%;
+  }
+
+  .nav-item.prev {
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .nav-item.next {
+    text-align: right;
+    padding-left: 1rem;
+  }
+
+  .nav-link {
+    color: #2c3e50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link:hover {
+    color: #3498db;
+    text-decoration: none;
+  }
+
+  .nav-disabled {
+    color: #95a5a6;
+    font-style: italic;
+  }
+
+  .nav-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .nav-title {
+      max-width: 30vw;
+    }
+  }
+</style>
+  
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+

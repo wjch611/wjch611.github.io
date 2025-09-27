@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" sizes="192x192" />
+  <link rel="apple-touch-icon" href="https://imgpoi.com/image/20250116182118.A8YG6V" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://wjch611.github.io/style.css">
+  <title>WJCH • 9月的计划：心理斗争，以后的人生选择！</title>
+  
+  <link rel="alternate" type="application/rss+xml" title="WJCH" href="https://wjch611.github.io/rss.xml">
+  
+  
+
+  
+  <script type="text/javascript" src="https://wjch611.github.io/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://wjch611.github.io/search_index.en.js" defer></script>
+  
+  <script type="text/javascript" src="https://wjch611.github.io/js/search.js" defer></script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+      },
+      startup: {
+        ready: () => {
+          const prelist = document.getElementsByTagName("pre");
+          const codelist = document.getElementsByTagName("code");
+          const inline = MathJax.config.tex.inlineMath;
+          const display = MathJax.config.tex.displayMath;
+          const inlineRegexList = inline.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const displayRegexList = display.map(delim => `(${delim[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})((.|[\\r\\n\\t])*?)(${delim[1].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")})`);
+          const inlineRegExp = new RegExp(inlineRegexList.join("|"));
+          const displayRegExp = new RegExp(displayRegexList.join("|"));
+
+          for (let i = prelist.length; i > 0; i--) {
+            if (displayRegExp.test(prelist[i - 1].textContent)) {
+              const t = document.createTextNode(prelist[i - 1].textContent);
+              prelist[i - 1].parentNode.insertBefore(t, prelist[i - 1]);
+              prelist[i - 1].parentNode.removeChild(prelist[i - 1]);
+            }
+          }
+
+          for (let i = codelist.length; i > 0; i--) {
+            if (inlineRegExp.test(codelist[i - 1].textContent)) {
+              const t = document.createTextNode(codelist[i - 1].textContent);
+              codelist[i - 1].parentNode.insertBefore(t, codelist[i - 1]);
+              codelist[i - 1].parentNode.removeChild(codelist[i - 1]);
+            }
+          }
+
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.getElementById('menu-button');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main');
+  
+      menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active'); // 切换侧边栏显示状态
+        mainContent.classList.toggle('active'); // 添加或移除遮罩效果
+      });
+  
+      // 点击主内容区域时，隐藏侧边栏
+      mainContent.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          mainContent.classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new Typed("#typed-text", {
+        strings: [
+          "你凌驾于念头"
+        ], // 每一段文字
+        typeSpeed: 50, // 打字速度
+        backSpeed: 30, // 删除速度
+        loop: true, // 是否循环
+        backDelay: 2000, // 删除前的停顿时间
+        showCursor: false, // 隐藏光标
+      });
+    });
+  </script>
+  <style>
+  .subtitle {
+    min-height: 24px;      /* 保证高度不塌缩，按需调整 */
+    line-height: 24px;     /* 垂直居中 */
+    font-size: 15px;
+    font-style: italic;
+  }
+  #typed-text { display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <div class="logo">
+          <img src="https://wjch611.github.io/images/logo.png" alt="Logo">
+        </div>
+        <h1><a href="https://wjch611.github.io/">WJCH</a></h1>
+        <div class="subtitle">
+            <span>悟已往之不鉴，知来者之可追！</span>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      <li><a href="https://github.com/wjch611" aria-label="Go to Github profile page" title="Github"><i class="fab fa-github"></i></a></li>
+      
+      <li>
+        <span id="search-ico" class="ms-Icon--Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </li>
+      
+      
+    </ul>
+
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://wjch611.github.io/">Home</a></li>
+        
+        <li><a  href="https://wjch611.github.io/tags">Tags</a></li>
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="footer">
+      
+      <div class="globe_css">
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=OMA2K1dAmRGTW9mPMmgzRLW7kMSfelF45YmgB4U81MA"></script>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="search-overlay">
+      <button id="close-search" class="close-button">✖</button>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <ul class="search-results">
+          <h2 class="search-results__header"></h2>
+          <ul class="search-results__items"></ul>
+        </ul>
+      </div>
+    </div>
+
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+
+<script src="https://wjch611.github.io/js/jquery-1.7.2.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      // 清空目录以防重复
+      $("#category").empty();
+  
+      // 添加文章目录
+      $("h2,h3,h4,h5,h6").each(function(i, item) {
+          var tag = $(item).prop("tagName").toLowerCase();
+          var anchorId = "wow" + i;
+          $(item).attr("id", anchorId);
+          // 如果是第一个项目，不加 <br>
+          if (i === 0) {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a>`);
+          } else {
+              $("#category").append(`<a class="new${tag}" href="#${anchorId}">${$(item).text()}</a><br>`); // 添加 <br> 实现换行
+          }
+      });
+  
+      // 设置目录项的缩进
+      $(".newh2").css("margin-left", 0);
+      $(".newh3").css("margin-left", 20);
+      $(".newh4").css("margin-left", 40);
+      $(".newh5").css("margin-left", 60);
+      $(".newh6").css("margin-left", 80);
+  
+      // 处理details元素的展开与收缩
+      document.querySelectorAll('details summary').forEach(function(summary) {
+          summary.addEventListener('click', function() {
+              var details = this.nextElementSibling;
+              details.style.display = details.style.display === 'none' ? 'block' : 'none';
+          });
+      });
+  });
+</script>
+
+<article class="post animated fadeInDown post article-page">
+  <h1><a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-29&#x2F;">9月的计划：心理斗争，以后的人生选择！</a></h1>
+  <div class="info">
+    
+      <i class="far fa-sun"></i>
+      <i>Push time: 2025-08-29 00:00:00&nbsp;&nbsp;</i>
+    
+
+    
+      <i class="fas fa-tags"></i>
+      
+        <a class="tag" href="https://wjch611.github.io/tags/sui-bi/">随笔&nbsp;&nbsp;</a>
+      
+    
+
+    <hr>
+  </div>
+  <!-- toc -->
+  <details class="details-2" open>
+    <summary tabindex="-1"><a href="javascript:void(0)"><i class="fa-solid fa-list"></i> 文章目录</a></summary>
+    <div id="category"></div>
+  </details>
+
+  <div class="post-content"><pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>思维的局限：
+</span><span>
+</span><span>1. 网络安全
+</span><span>2. 海员
+</span><span>3. 就业摸爬滚打
+</span><span>4. 考网警
+</span><span>5. 脱产自己创造产生价值
+</span><span>
+</span><span>网络安全是否是热爱？
+</span><span>
+</span><span>为什么选择网络安全，为什么对它感兴趣？
+</span><span>
+</span><span>1. 炫耀技术，证明自己
+</span><span>2. 能赚钱
+</span><span>
+</span><span>为什么想要放弃？
+</span><span>
+</span><span>1. 与许多真正的天才相比，我发现自己没有天赋，失去信心
+</span><span>2. 漏洞挖掘 付出和收获 =! 正比
+</span><span>
+</span><span>那是否需要放弃网络安全？
+</span><span>
+</span><span>1. 纠结中
+</span><span>
+</span><span>那现在放弃了网络安全，什么打算？
+</span><span>
+</span><span>1. 还是在互联网领域寻找机会，创造一些东西，成立一家公司，但是现在没有好的想法
+</span><span>
+</span><span>接下来该怎么办？
+</span><span>
+</span><span>1. 考华为OD，或者去准备去一家比较大或者稳定的单位，互联网方向都行
+</span><span>2. 不找工作，自己摸索一条道路，创造自己的价值
+</span><span>
+</span><span>1是上策，摸索道路需要的不是时间，而是想法，大把空闲的时间不一定能摸索出道路
+</span><span>
+</span><span>创造价值完全可以是一条支线任务，只需要安排一天中的某一小段时间，思考，观察与摸索，最重要的是坚持
+</span><span>
+</span></code></pre>
+<h5 id="di-yi-ci">第一次：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>所以理性分析，下一步的计划是：
+</span><span>
+</span><span>1. 主线考华为OD
+</span><span>2. 支线摸索其他道路
+</span></code></pre>
+<h5 id="di-er-ci">第二次：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>我想活成什么样子？
+</span><span>初步：
+</span><span>1. 就靠自己的创造的价值获取收入，不需要时间和空间的限制，收入能覆盖我的生活即可
+</span><span>2. 每天都在成长，自己的价值会随着自己的成长而提高
+</span><span>那么我为什么还需要靠华为OD，我为什么还需要加班？
+</span><span>所以下一步的计划是：
+</span><span>1. 找一个消费低的地方，好好安顿好生活
+</span><span>2. 找一个日结兼职，每周兼职天数2天，只要能覆盖支出就行
+</span><span>3. 尝试各个方向提升自己，并且找到自己价值输出的方向
+</span></code></pre>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>我真的需要一些精神支柱，那些看了就能让我恢复能量或者希望的视频：
+</span><span>1.  heymatt
+</span><span>2.	youtube的那个长头发的博主
+</span><span>...
+</span><span>最让我激动的事情还是：
+</span><span>1. 提升自己
+</span><span>2. 过自己想要的生活
+</span></code></pre>
+<h5 id="di-san-ci">第三次：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>日结+自由发挥还是不能接受：
+</span><span>1. 大把的时间掌握在手里，一开始总是掌握不好的，很可能适得其反，比如摆烂厌倦....
+</span><span>2. 日结的工作太不体面，而且太心累了，总是找来找去
+</span><span>调整安排：
+</span><span>1. 找一个工作低一点，工作时间短，周末双休的工作
+</span><span>2. 下班时间提升自己，最重要是建立一个额外的可成长性收入体系
+</span><span>所以这样也不用去城中村了，直接在这里找到一个合适的工作，然后直接去就是了。
+</span></code></pre>
+<h5 id="4">4：</h5>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>还是有些担心的就是，这样的工作肯定是学不到任何东西的，并且建立额外的收入体系也不是短期就能建立的，可能得以年为单位，那要是这样没有建立起来，就相当于浪费了这么长时间。
+</span><span>其实我的纠结越来越趋向于完美主义，既要又要，既要工作时间不压榨，也要工作能积累经验，也要额外的发展
+</span><span>现在想一想？
+</span><span>海员就是一个这样的选项，但是它的属性太特别了，物理上需要牺牲大部分
+</span><span>
+</span><span>
+</span><span>技术没什么用，哪个性价比高就去哪个，存好钱找机会做生意，空闲时间多的工作最好，能处理更多并发量能分析更复杂数据有卵用，一样是打工的不会有什么建树，喜欢技术那就老老实实提升学历去研究所，在打工的地方用别人的工具去研究技术感觉很奇怪。
+</span><span>
+</span><span>用工作提升自己的技术我还是算了吧，工作对于我来说更多的是消耗精力去达成一定的目标，去和同事客户凑合，我还是去找一份不需要技术的清闲的工作吧，毕竟这样的工作应该是一直有的，我把梦想赌在工作之外，一旦自己的其他被动收入能覆盖支出，我就立马自由！
+</span></code></pre>
+<pre style="background-color:#eff1f5;color:#4f5b66;"><code><span>最终决定：
+</span><span>还是找一个清闲一点的能生存下来的工作，然后在工作之外追求梦想吧！
+</span></code></pre>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        <!-- 这里可以添加额外的 meta 信息 -->
+        
+        
+        
+    
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <div class="post-navigation">
+          
+          <div class="nav-item prev">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-31&#x2F;" class="nav-link">
+                <i class="fas fa-chevron-left"></i>
+                <span class="nav-title">纳瓦尔宝典</span>
+              </a>
+            
+          </div>
+      
+          
+          <div class="nav-item next">
+            
+              
+              
+              <a href="https:&#x2F;&#x2F;wjch611.github.io&#x2F;Blog&#x2F;2025&#x2F;08-28&#x2F;" class="nav-link">
+                <span class="nav-title">一次次的碰壁之后该怎么办</span>
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+  .post-navigation {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+  }
+
+  .nav-item {
+    flex: 1;
+    max-width: 45%;
+  }
+
+  .nav-item.prev {
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .nav-item.next {
+    text-align: right;
+    padding-left: 1rem;
+  }
+
+  .nav-link {
+    color: #2c3e50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link:hover {
+    color: #3498db;
+    text-decoration: none;
+  }
+
+  .nav-disabled {
+    color: #95a5a6;
+    font-style: italic;
+  }
+
+  .nav-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .nav-title {
+      max-width: 30vw;
+    }
+  }
+</style>
+  
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
